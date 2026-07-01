@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.project.jobseek.company.dto.CompanyFullDetailsDTO;
 import com.project.jobseek.company.service.CompanyService;
+import com.project.jobseek.utils.responseutils.JobSeekResponse;
 
 @RequestMapping("/api/v1")
 @RestController
@@ -24,12 +25,12 @@ public class CompanyControllerV1
 	@Autowired
 	private CompanyService companyService;
 
-	@GetMapping("/company")
-	public ResponseEntity<List<CompanyFullDetailsDTO>> getCompany()
+	@GetMapping("/companies")
+	public ResponseEntity<JobSeekResponse> getCompany()
 	{
 		List<CompanyFullDetailsDTO> companyFullDetailsDTOList = companyService.getAllCompanyDetails().stream().map(
 			company -> modelMapper.map(company , CompanyFullDetailsDTO.class )
 		).collect(Collectors.toList());
-		return ResponseEntity.status(200).body(companyFullDetailsDTOList);
+		return ResponseEntity.ok().body(JobSeekResponse.of( 200L , companyFullDetailsDTOList ));
 	}
 }

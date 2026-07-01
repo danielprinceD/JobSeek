@@ -19,4 +19,14 @@ public class CompanyService
 	{
 		return companyRepository.findAll();
 	}
+
+	public Company getCompanyById(Long companyId)
+	{
+		return companyRepository.findById(companyId).orElse(null);
+	}
+
+	public Company saveCompany(Company company)
+	{
+		return companyRepository.save(company);
+	}
 }
