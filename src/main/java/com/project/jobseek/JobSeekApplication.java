@@ -1,4 +1,4 @@
-package com.project.JobSeek;
+package com.project.jobseek;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,5 +8,4 @@ public class JobSeekApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(JobSeekApplication.class, args);
 	}
-
 }
