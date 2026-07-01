@@ -29,4 +29,14 @@ public class CompanyService
 	{
 		return companyRepository.save(company);
 	}
+
+	public boolean deleteCompany(Long companyId)
+	{
+		if(companyRepository.existsById(companyId))
+		{
+			companyRepository.deleteById(companyId);
+			return true;
+		}
+		return false;
+	}
 }
