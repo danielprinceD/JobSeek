@@ -8,9 +8,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.Data;
 
 @Table( name = "company_address")
 @Entity
+@Data
 public class CompanyAddress
 {
 	@GeneratedValue( strategy = GenerationType.IDENTITY )
@@ -18,8 +20,8 @@ public class CompanyAddress
 	private Long companyAddressId;
 
 	@OneToOne
-	@JoinColumn( name = "companyId" , referencedColumnName = "companyId" , nullable = false , unique = true )
-	private Company companyId;
+	@JoinColumn( name = "company_address_id" , referencedColumnName = "company_id" , nullable = false , unique = true )
+	private Company company;
 
 	private String street;
 	private String city;

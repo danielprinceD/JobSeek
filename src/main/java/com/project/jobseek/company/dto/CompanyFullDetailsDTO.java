@@ -11,10 +11,12 @@ public class CompanyFullDetailsDTO
 	private String companyName;
 	private String companyEmail;
 	private String companyPhone;
-	private String companyAddress;
+	private CompanyAddressDTO  companyAddress;
 	private String companyWebsite;
 	private String companyDescription;
 	private byte[] companyLogo;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 }
+
+
