@@ -20,9 +20,10 @@ public class CompanyService
 		return companyRepository.findAll();
 	}
 
-	public Company getCompanyById(Long companyId)
+	public Company getCompanyById(String companyId)
 	{
-		return companyRepository.findById(companyId).orElse(null);
+		Long id = Long.parseLong(companyId);
+		return companyRepository.findById(id).orElse(null);
 	}
 
 	public Company saveCompany(Company company)
