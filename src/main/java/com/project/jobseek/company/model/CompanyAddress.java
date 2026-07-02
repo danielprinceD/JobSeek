@@ -18,9 +18,10 @@ public class CompanyAddress
 	@GeneratedValue( strategy = GenerationType.IDENTITY )
 	@Id
 	private Long companyAddressId;
-
 	@OneToOne
-	@JoinColumn( name = "company_address_id" , referencedColumnName = "company_id" , nullable = false , unique = true )
+
+
+	@JoinColumn( name = "company_id" , referencedColumnName = "companyId" , nullable = false , unique = true )
 	private Company company;
 
 	private String street;

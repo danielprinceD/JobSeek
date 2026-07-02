@@ -12,9 +12,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,9 +60,47 @@ public class CompanyControllerV1
 	public ResponseEntity<JobSeekResponse> saveCompany( @Valid @RequestBody CompanyRequest companyRequest){
 		Company company = modelMapper.map(companyRequest , Company.class );
 		company.setCompanyAddress( modelMapper.map( companyRequest.getCompanyAddress() , CompanyAddress.class ));
+		company.getCompanyAddress().setCompany(company);
 		Company savedCompany = companyService.saveCompany(company);
 		CompanyFullDetailsDTO companyFullDetail = modelMapper.map(savedCompany , CompanyFullDetailsDTO.class );
 		return ResponseEntity.status( HttpStatus.CREATED ).body( JobSeekResponse.of( HttpStatus.CREATED , companyFullDetail ));
 	}
 
+	@PutMapping("/companies/{id}")
+	public ResponseEntity<JobSeekResponse> updateCompany(@PathVariable( "id" ) String companyId , @Valid @RequestBody CompanyRequest companyRequest){
+		Optional<Company> existingCompany = Optional.ofNullable(companyService.getCompanyById(companyId));
+		if(existingCompany.isEmpty())
+			return ResponseEntity.status( HttpStatus.NOT_FOUND  ).body( JobSeekResponse.of(HttpStatus.NOT_FOUND , "Company ID is Invalid" ) );
+
+		Company companyToUpdate = existingCompany.get();
+
+		modelMapper.map(companyRequest, companyToUpdate);
+
+		if (companyRequest.getCompanyAddress() != null) {
+
+			CompanyAddress address = companyToUpdate.getCompanyAddress();
+
+			if (address == null) {
+				address = new CompanyAddress();
+				companyToUpdate.setCompanyAddress(address);
+			}
+
+			modelMapper.map(companyRequest.getCompanyAddress(), address);
+			address.setCompany(companyToUpdate);
+		}
+
+		Company updatedCompany = companyService.saveCompany(companyToUpdate);
+		CompanyFullDetailsDTO companyFullDetail = modelMapper.map(updatedCompany , CompanyFullDetailsDTO.class );
+		return ResponseEntity.status( HttpStatus.OK ).body( JobSeekResponse.of( HttpStatus.OK , companyFullDetail ));
+	}
+
+	@DeleteMapping("/companies/{id}")
+	public ResponseEntity<JobSeekResponse> deleteCompany(@PathVariable( "id" ) String companyId)
+	{
+		Long id = Long.parseLong(companyId);
+		boolean isDeleted = companyService.deleteCompany(id);
+		if(!isDeleted)
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(JobSeekResponse.of(HttpStatus.NOT_FOUND, "Company ID is Invalid"));
+		return  ResponseEntity.status(HttpStatus.OK).body(JobSeekResponse.of(HttpStatus.OK, "Company deleted successfully"));
+	}
 }
