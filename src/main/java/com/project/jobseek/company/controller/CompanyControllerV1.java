@@ -46,4 +46,6 @@ public class CompanyControllerV1
 		CompanyFullDetailsDTO companyFullDetail = modelMapper.map(company , CompanyFullDetailsDTO.class );
 		return ResponseEntity.status( HttpStatus.OK ).body( JobSeekResponse.of( HttpStatus.OK , companyFullDetail ));
 	}
+
+
 }
