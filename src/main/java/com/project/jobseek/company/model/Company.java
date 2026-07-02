@@ -30,7 +30,7 @@ public class Company
 
 	@Column(  unique = true , nullable = false )
 	private String companyEmail;
-
+	
 	private String companyPhone;
 
 	@OneToOne( cascade = CascadeType.ALL , mappedBy = "company" ,fetch = FetchType.LAZY )
