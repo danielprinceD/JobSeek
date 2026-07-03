@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.jobseek.company.dto.request.CompanyDepartmentRequest;
+import com.project.jobseek.company.model.Company;
 import com.project.jobseek.company.service.CompanyService;
+import com.project.jobseek.department.dto.DepartmentDTO;
 import com.project.jobseek.department.model.Department;
 import com.project.jobseek.utils.responseutils.JobSeekResponse;
 
@@ -29,18 +31,25 @@ public class CompanyDepartmentControllerV1
 	private ModelMapper modelMapper;
 
 	@GetMapping("/departments")
-	public ResponseEntity<JobSeekResponse<List<Department>>> getCompanyDepartments(@PathVariable ("companyId") String companyId){
+	public ResponseEntity<JobSeekResponse<List<DepartmentDTO>>> getCompanyDepartments(@PathVariable ("companyId") String companyId){
 		Long id = Long.parseLong(companyId);
 		List<Department> departments =  companyService.getAllDepartmentByCompanyId(id);
-		return ResponseEntity.ok().body(JobSeekResponse.of(HttpStatus.OK, departments));
+		List<DepartmentDTO> departmentDTOS = departments.stream().map(department ->
+			modelMapper.map(department , DepartmentDTO.class)
+		).toList();
+		return ResponseEntity.ok().body(JobSeekResponse.of(HttpStatus.OK, departmentDTOS));
 	}
 
 	@PostMapping("/departments")
-	public ResponseEntity<JobSeekResponse<Department>> createDepartment(@PathVariable ("companyId") String companyId , @RequestBody CompanyDepartmentRequest departmentRequest){
+	public ResponseEntity<JobSeekResponse> createDepartment(@PathVariable ("companyId") String companyId , @RequestBody CompanyDepartmentRequest departmentRequest){
 		Long id = Long.parseLong(companyId);
 		Department department = modelMapper.map(departmentRequest , Department.class);
-		department.setCompany(companyService.getCompanyById(companyId));
+		Company company = companyService.getCompanyById(companyId);
+		if(company == null)
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(JobSeekResponse.of(HttpStatus.NOT_FOUND, "Company ID is Invalid"));
+		department.setCompany(company);
 		Department savedDepartment = companyService.saveDepartment(department);
-		return ResponseEntity.status(HttpStatus.CREATED).body(JobSeekResponse.of(HttpStatus.CREATED, savedDepartment));
+		DepartmentDTO departmentDTO = modelMapper.map(savedDepartment , DepartmentDTO.class);
+		return ResponseEntity.status(HttpStatus.CREATED).body(JobSeekResponse.of(HttpStatus.CREATED, departmentDTO));
 	}
 }

@@ -48,7 +48,7 @@ public class CompanyService
 
 	public List<Department> getAllDepartmentByCompanyId(Long companyId)
 	{
-		return departmentRepository.findAllByCompanyId(companyId);
+		return departmentRepository.findAllByCompanyCompanyId(companyId);
 	}
 
 	public Department saveDepartment(Department department)

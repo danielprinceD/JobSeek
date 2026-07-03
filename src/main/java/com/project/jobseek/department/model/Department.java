@@ -22,7 +22,7 @@ public class Department
 {
 
 	@ManyToOne
-	@JoinColumn( name="company_id" , referencedColumnName = "companyId" , nullable = false )
+	@JoinColumn( name="company_id" , nullable = false )
 	private Company company;
 
 	@GeneratedValue( strategy = GenerationType.IDENTITY )

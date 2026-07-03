@@ -16,6 +16,6 @@ public class DepartmentService
 
 	List<Department> getAllDepartmentByCompanyId(Long companyId)
 	{
-		return departmentRepository.findAllByCompanyId(companyId);
+		return departmentRepository.findAllByCompanyCompanyId(companyId);
 	}
 }
