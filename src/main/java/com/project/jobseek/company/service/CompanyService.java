@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 
 import com.project.jobseek.company.model.Company;
 import com.project.jobseek.company.repository.CompanyRepository;
+import com.project.jobseek.department.model.Department;
+import com.project.jobseek.department.repository.DepartmentRepository;
 
 @Component
 public class CompanyService
@@ -14,6 +16,9 @@ public class CompanyService
 
 	@Autowired
 	private CompanyRepository companyRepository;
+
+	@Autowired
+	private DepartmentRepository departmentRepository;
 
 	public List<Company> getAllCompanyDetails()
 	{
@@ -40,4 +45,15 @@ public class CompanyService
 		}
 		return false;
 	}
+
+	public List<Department> getAllDepartmentByCompanyId(Long companyId)
+	{
+		return departmentRepository.findAllByCompanyId(companyId);
+	}
+
+	public Department saveDepartment(Department department)
+	{
+		return departmentRepository.save(department);
+	}
+
 }

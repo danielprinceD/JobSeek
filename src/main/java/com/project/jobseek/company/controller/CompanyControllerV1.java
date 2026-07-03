@@ -103,4 +103,5 @@ public class CompanyControllerV1
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(JobSeekResponse.of(HttpStatus.NOT_FOUND, "Company ID is Invalid"));
 		return  ResponseEntity.status(HttpStatus.OK).body(JobSeekResponse.of(HttpStatus.OK, "Company deleted successfully"));
 	}
+
 }
