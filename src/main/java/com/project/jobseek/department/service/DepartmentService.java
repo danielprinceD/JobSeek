@@ -31,6 +31,9 @@ public class DepartmentService
 	}
 
 	public List<JobTable> getAllJobsByDepartmentId(Long departmentId){
-		return jobRepository.findAllByJobTableDepartmentId(departmentId);
+		return jobRepository.findAllByDepartmentDepartmentId(departmentId);
+	}
+	public JobTable saveJob(JobTable job){
+		return jobRepository.save(job);
 	}
 }

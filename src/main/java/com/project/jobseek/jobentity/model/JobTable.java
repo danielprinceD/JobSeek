@@ -30,6 +30,7 @@ public class JobTable
 	private String jobTitle;
 	private String jobDescription;
 	private String jobLocation;
+	private String jobStatus;
 
 	@ManyToOne
 	@JoinColumn( name = "department_id" , referencedColumnName = "departmentId" )

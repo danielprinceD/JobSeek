@@ -9,4 +9,5 @@ public class JobDTO
 	private String jobTitle;
 	private String jobDescription;
 	private String jobLocation;
+	private String jobStatus;
 }

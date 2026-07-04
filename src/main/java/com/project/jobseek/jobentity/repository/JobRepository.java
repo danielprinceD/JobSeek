@@ -10,5 +10,5 @@ import com.project.jobseek.jobentity.model.JobTable;
 @Component
 public interface JobRepository extends JpaRepository<JobTable , Long>
 {
-	List<JobTable> findAllByJobTableDepartmentId(Long departmentId);
+	List<JobTable> findAllByDepartmentDepartmentId(Long departmentId);
 }
