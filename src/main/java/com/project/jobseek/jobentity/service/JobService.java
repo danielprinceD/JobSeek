@@ -2,6 +2,7 @@ package com.project.jobseek.jobentity.service;
 
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,8 +12,8 @@ import com.project.jobseek.jobentity.repository.JobRepository;
 @Component
 public class JobService
 {
-	@Autowired
-	private JobRepository jobRepository;
+	@Autowired private JobRepository jobRepository;
+	@Autowired private ModelMapper modelMapper;
 
 	public JobTable getJobById(Long jobId)
 	{
@@ -32,5 +33,15 @@ public class JobService
 		}
 		return false;
 	}
+
+	public JobTable updateJobById(Long jobId , JobTable jobTable){
+		JobTable existingJob = jobRepository.findById(jobId).orElse(null);
+		if(existingJob == null)
+			return null;
+		modelMapper.map(jobTable , existingJob);
+		existingJob.setJobId(jobId);
+		return jobRepository.save(existingJob);
+	}
+
 
 }
