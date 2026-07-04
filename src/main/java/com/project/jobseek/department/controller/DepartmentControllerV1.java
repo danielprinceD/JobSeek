@@ -21,11 +21,9 @@ import com.project.jobseek.utils.responseutils.JobSeekResponse;
 @RestController
 public class DepartmentControllerV1
 {
-	@Autowired
-	private DepartmentService departmentService;
+	@Autowired private DepartmentService departmentService;
 
-	@Autowired
-	private ModelMapper modelMapper;
+	@Autowired private ModelMapper modelMapper;
 
 	@PutMapping("/departments/{departmentId}")
 	public ResponseEntity<JobSeekResponse> updateDepartment( @PathVariable("departmentId") String departmentId , @RequestBody CompanyDepartmentRequest departmentDTO){
@@ -50,5 +48,4 @@ public class DepartmentControllerV1
 		departmentService.deleteDepartment(deptId);
 		return ResponseEntity.status(HttpStatus.OK).body(JobSeekResponse.of(HttpStatus.OK , "Department Deleted Successfully"));
 	}
-
 }
