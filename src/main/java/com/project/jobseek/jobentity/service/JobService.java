@@ -40,8 +40,10 @@ public class JobService
 			return null;
 		modelMapper.map(jobTable , existingJob);
 		existingJob.setJobId(jobId);
-		return jobRepository.save(existingJob);
+		return saveJob(existingJob);
 	}
 
-
+	public JobTable saveJob(JobTable job){
+		return jobRepository.save(job);
+	}
 }

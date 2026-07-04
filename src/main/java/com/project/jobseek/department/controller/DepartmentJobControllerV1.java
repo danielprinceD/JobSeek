@@ -20,6 +20,7 @@ import com.project.jobseek.department.service.DepartmentService;
 import com.project.jobseek.jobentity.dto.JobDTO;
 import com.project.jobseek.jobentity.dto.request.JobRequest;
 import com.project.jobseek.jobentity.model.JobTable;
+import com.project.jobseek.jobentity.service.JobService;
 import com.project.jobseek.jobentity.validator.JobRequestValidator;
 import com.project.jobseek.utils.responseutils.JobSeekResponse;
 import com.project.jobseek.utils.validator.ValidationResult;
@@ -30,6 +31,7 @@ public class DepartmentJobControllerV1
 {
 	@Autowired private ModelMapper modelMapper;
 	@Autowired private DepartmentService departmentService;
+	@Autowired private JobService jobService;
 
 	@GetMapping("/jobs")
 	public ResponseEntity<JobSeekResponse> getJobsByDepartmentId(@PathVariable("departmentId") String departmentId){
@@ -55,7 +57,7 @@ public class DepartmentJobControllerV1
 		}
 		JobTable savedJob = modelMapper.map(jobRequest , JobTable.class);
 		savedJob.setDepartment(department);
-		savedJob = departmentService.saveJob(savedJob);
+		savedJob = jobService.saveJob(savedJob);
 		JobDTO savedJobDTO = modelMapper.map(savedJob , JobDTO.class);
 		return ResponseEntity.status(HttpStatus.CREATED).body(JobSeekResponse.of(HttpStatus.CREATED, savedJobDTO));
 	}
