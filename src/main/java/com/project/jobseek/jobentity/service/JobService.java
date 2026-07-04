@@ -23,4 +23,14 @@ public class JobService
 		return jobRepository.findAll();
 	}
 
+	public boolean deleteJobById(Long jobId)
+	{
+		if(jobRepository.existsById(jobId))
+		{
+			jobRepository.deleteById(jobId);
+			return true;
+		}
+		return false;
+	}
+
 }
