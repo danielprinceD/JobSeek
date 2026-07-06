@@ -10,6 +10,8 @@ public class AppConfig
 	@Bean
 	public ModelMapper getModelMapper()
 	{
-		return new ModelMapper();
+		ModelMapper mapper = new ModelMapper();
+		mapper.getConfiguration().setSkipNullEnabled(true);
+		return mapper;
 	}
 }
