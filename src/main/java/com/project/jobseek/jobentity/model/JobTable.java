@@ -43,5 +43,4 @@ public class JobTable
 		inverseJoinColumns = @JoinColumn( name = "skill_id" )
 	)
 	List<Skill> skills;
-
 }
