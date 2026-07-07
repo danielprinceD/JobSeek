@@ -1,6 +1,7 @@
 package com.project.jobseek.company.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -9,6 +10,7 @@ import com.project.jobseek.company.model.Company;
 import com.project.jobseek.company.repository.CompanyRepository;
 import com.project.jobseek.department.model.Department;
 import com.project.jobseek.department.repository.DepartmentRepository;
+import com.project.jobseek.utils.user.CurrentUser;
 
 @Component
 public class CompanyService
@@ -22,13 +24,15 @@ public class CompanyService
 
 	public List<Company> getAllCompanyDetails()
 	{
-		return companyRepository.findAll();
+		Optional<List<Company>> companyList = Optional.of(companyRepository.findAllByCreatedByUserId(CurrentUser.get().getUserId()));
+		return companyList.orElse(List.of());
 	}
 
 	public Company getCompanyById(String companyId)
 	{
 		Long id = Long.parseLong(companyId);
-		return companyRepository.findById(id).orElse(null);
+		Optional<Company> company = Optional.ofNullable(companyRepository.findByCompanyIdAndCreatedByUserId(id , CurrentUser.get().getUserId()));
+		return company.orElse(null);
 	}
 
 	public Company saveCompany(Company company)
