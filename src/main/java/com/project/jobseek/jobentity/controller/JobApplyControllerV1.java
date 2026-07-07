@@ -80,4 +80,12 @@ public class JobApplyControllerV1
 			return JobSeekResponse.withResponseEntity(HttpStatus.NOT_FOUND, "No Job Apply Found");
 		return JobSeekResponse.withResponseEntity(HttpStatus.OK, updatedJobApplyList);
 	}
+	@DeleteMapping("/jobs/{jobId}/apply")
+	public ResponseEntity<? extends JobSeekResponse<?>> deleteJobApplyByJobId(@PathVariable("jobId") String jobId){
+		Long jobIdLong = Long.parseLong(jobId);
+		boolean isDeleted = jobService.deleteJobApplyByJobId(jobIdLong);
+		if(isDeleted)
+			return JobSeekResponse.withResponseEntity(HttpStatus.OK, "Job Apply Deleted Successfully");
+		return JobSeekResponse.withResponseEntity(HttpStatus.NOT_FOUND, "No Job Apply Found");
+	}
 }

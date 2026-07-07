@@ -75,7 +75,7 @@ public class JobService
 		JobApply jobApply = new JobApply();
 		jobApply.setJob(job);
 		jobApply.setUser(user);
-		jobApply.setStatus(status.getStatus());
+		jobApply.setStatus(status);
 		return jobApplyRepository.save(jobApply);
 	}
 	public List<JobApply> updateJobApplyStatus(List<Long> jobApplyIds , JobAppliedStatus status){
@@ -84,8 +84,18 @@ public class JobService
 			return List.of();
 		}
 		jobApplyList.forEach(jobApply -> {
-			jobApply.setStatus(status.getStatus());
+			jobApply.setStatus(status);
 		});
 		return jobApplyRepository.saveAll(jobApplyList);
 	}
+
+	public boolean deleteJobApplyByJobId(Long jobId){
+		List<JobApply> jobApplyList = jobApplyRepository.findByJobJobId(jobId);
+		if(jobApplyList.isEmpty()){
+			return false;
+		}
+		jobApplyRepository.deleteAll(jobApplyList);
+		return true;
+	}
+
 }

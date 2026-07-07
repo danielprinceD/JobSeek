@@ -1,6 +1,8 @@
 package com.project.jobseek.jobentity.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -11,6 +13,7 @@ import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.Constraint;
 import lombok.Data;
 
+import com.project.jobseek.jobentity.enums.JobAppliedStatus;
 import com.project.jobseek.user.model.User;
 
 @Entity
@@ -36,6 +39,7 @@ public class JobApply
 	@JoinColumn( name = "user_id" )
 	User user;
 
-	String status;
+	@Enumerated( value = EnumType.ORDINAL)
+	JobAppliedStatus status;
 
 }
