@@ -78,4 +78,14 @@ public class JobService
 		jobApply.setStatus(status.getStatus());
 		return jobApplyRepository.save(jobApply);
 	}
+	public List<JobApply> updateJobApplyStatus(List<Long> jobApplyIds , JobAppliedStatus status){
+		List<JobApply> jobApplyList = jobApplyRepository.findAllById(jobApplyIds);
+		if(jobApplyList.isEmpty()){
+			return List.of();
+		}
+		jobApplyList.forEach(jobApply -> {
+			jobApply.setStatus(status.getStatus());
+		});
+		return jobApplyRepository.saveAll(jobApplyList);
+	}
 }
