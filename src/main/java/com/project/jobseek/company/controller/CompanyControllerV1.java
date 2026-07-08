@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +26,10 @@ import com.project.jobseek.company.dto.CompanyFullDetailsDTO;
 import com.project.jobseek.company.dto.request.CompanyRequest;
 import com.project.jobseek.company.model.Company;
 import com.project.jobseek.company.model.CompanyAddress;
+import com.project.jobseek.company.permission.enums.CompanyEntityPermissions;
 import com.project.jobseek.company.service.CompanyService;
+import com.project.jobseek.role.permission.enums.EntityRolePermission;
+import com.project.jobseek.utils.constants.EntityConstants;
 import com.project.jobseek.utils.responseutils.JobSeekResponse;
 
 @RequestMapping("/api/v1")

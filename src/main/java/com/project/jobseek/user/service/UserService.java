@@ -16,6 +16,8 @@ public class UserService
 	@Autowired ModelMapper modelMapper;
 
 	public User createUser(User user){
+		System.out.println(user.getUserId());
+		System.out.println(user.getUserRole().getRoleId());
 		return userRepository.save(user);
 	}
 
