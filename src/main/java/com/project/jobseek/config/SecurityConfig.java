@@ -6,7 +6,10 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
+import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -17,14 +20,13 @@ public class SecurityConfig
 {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http , AuthenticationFilter authFilter) throws Exception{
-		http.authorizeHttpRequests( authorize ->
+		http.formLogin(FormLoginConfigurer::disable)
+			.httpBasic(HttpBasicConfigurer::disable)
+			.csrf(CsrfConfigurer::disable)
+			.authorizeHttpRequests( authorize ->
 			authorize.requestMatchers( HttpMethod.POST , "/api/*/users").permitAll()
 				.anyRequest().authenticated()
-
-		)
-			.formLogin(Customizer.withDefaults())
-			.httpBasic(Customizer.withDefaults())
-			.csrf(CsrfConfigurer::disable)
+			)
 			.addFilterBefore(
 				authFilter ,
 				UsernamePasswordAuthenticationFilter.class

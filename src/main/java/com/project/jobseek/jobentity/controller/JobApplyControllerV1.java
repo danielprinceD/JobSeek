@@ -28,6 +28,7 @@ import com.project.jobseek.jobentity.service.JobService;
 import com.project.jobseek.jobentity.validator.JobApplyRequestValidator;
 import com.project.jobseek.user.dto.UserDTO;
 import com.project.jobseek.utils.responseutils.JobSeekResponse;
+import com.project.jobseek.utils.user.CurrentUser;
 import com.project.jobseek.utils.validator.ValidationResult;
 
 @RequestMapping("/api/v1")
@@ -51,11 +52,11 @@ public class JobApplyControllerV1
 		return JobSeekResponse.withResponseEntity(HttpStatus.OK, jobAppliedUserResponse );
 	}
 
-	@PostMapping("/jobs/{jobId}/apply/{userId}")
-	public ResponseEntity<? extends JobSeekResponse<?>> applyJobByUserId(@PathVariable("jobId") String jobId , @PathVariable("userId") String userId){
+	@PostMapping("/jobs/{jobId}/apply")
+	public ResponseEntity<? extends JobSeekResponse<?>> applyJobByUserId(@PathVariable("jobId") String jobId ){
 		Long jobIdLong = Long.parseLong(jobId);
-		Long userIdLong = Long.parseLong(userId);
-		JobApply savedJobApply = jobService.saveJobApply(jobIdLong , userIdLong, JobAppliedStatus.APPLIED);
+		Long userId = CurrentUser.get().getUserId();
+		JobApply savedJobApply = jobService.saveJobApply(jobIdLong , userId, JobAppliedStatus.APPLIED);
 		if(savedJobApply == null)
 			return JobSeekResponse.withResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, "Job Application Failed");
 

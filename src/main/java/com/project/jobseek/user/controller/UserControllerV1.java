@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.jobseek.role.model.Role;
+import com.project.jobseek.role.service.RoleService;
+import com.project.jobseek.user.dto.UserDTO;
 import com.project.jobseek.user.dto.request.UserRequest;
 import com.project.jobseek.user.model.User;
 import com.project.jobseek.user.service.UserService;
@@ -26,6 +29,7 @@ import com.project.jobseek.utils.responseutils.JobSeekResponse;
 public class UserControllerV1
 {
 	@Autowired private UserService userService;
+	@Autowired private RoleService roleService;
 	@Autowired private ModelMapper modelMapper;
 
 	@GetMapping("/users/{userID}")
@@ -35,17 +39,29 @@ public class UserControllerV1
 		if(user == null){
 			return JobSeekResponse.withResponseEntity(HttpStatus.NOT_FOUND , "User not found");
 		}
-		return JobSeekResponse.withResponseEntity(HttpStatus.OK , user);
+		UserDTO userDTO = modelMapper.map(user , UserDTO.class);
+		return JobSeekResponse.withResponseEntity(HttpStatus.OK , userDTO);
 	}
 
 	@PostMapping("/users")
 	public ResponseEntity<? extends JobSeekResponse<?>> createUser(@Valid  @RequestBody UserRequest userRequest){
 		User user = modelMapper.map(userRequest , User.class);
+		Long roleId = userRequest.getRoleId();
+		if(roleId == null){
+			return JobSeekResponse.withResponseEntity(HttpStatus.BAD_REQUEST , "Role ID is required");
+		}
+		Role role = roleService.getRoleById(roleId);
+		if(role == null){
+			return JobSeekResponse.withResponseEntity(HttpStatus.BAD_REQUEST , "Role not found");
+		}
+		user.setUserRole(role);
+
 		User createdUser = userService.createUser(user);
 		if(createdUser == null){
 			return JobSeekResponse.withResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR , "User creation failed");
 		}
-		return JobSeekResponse.withResponseEntity(HttpStatus.CREATED , createdUser);
+		UserDTO userDTO = modelMapper.map(createdUser , UserDTO.class);
+		return JobSeekResponse.withResponseEntity(HttpStatus.CREATED , userDTO);
 	}
 
 	@PutMapping("/users/{userId}")
