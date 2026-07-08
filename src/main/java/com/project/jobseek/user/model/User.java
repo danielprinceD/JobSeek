@@ -1,7 +1,9 @@
 package com.project.jobseek.user.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -43,7 +45,6 @@ public class User implements UserDetails
 	private String email;
 	@ManyToOne
 	@JoinColumn( name = "role_id" , referencedColumnName = "roleId" )
-	@OnDelete( action = OnDeleteAction.CASCADE )
 	private Role userRole;
 
 	@Override public Collection<? extends GrantedAuthority> getAuthorities()
@@ -52,7 +53,7 @@ public class User implements UserDetails
 		for(EntityRolePermission entityRolePermission : EntityRolePermission.values() ){
 			List<? extends EnumPermission> permissions = entityRolePermission.getEntityPermission().getPermissions(userRole.getRoleType());
 			permissions.forEach(
-				permission -> authorities.add(new SimpleGrantedAuthority( entityRolePermission.getEntityPermission().getEntity() + "_" + permission.getName() ) )
+				permission -> authorities.add(new SimpleGrantedAuthority( entityRolePermission.getEntityPermission().getEntity() + "_" + permission.name() ) )
 			);
 		}
 		return authorities;

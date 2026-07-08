@@ -16,7 +16,6 @@ import com.project.jobseek.role.model.Role;
 import com.project.jobseek.role.repository.RoleRepository;
 
 @Component
-@Transactional
 public class ApplicationStartUpSeeder implements CommandLineRunner
 {
 	@Autowired private RoleRepository roleRepository;

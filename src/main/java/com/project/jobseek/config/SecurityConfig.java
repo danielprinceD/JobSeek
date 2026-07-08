@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
@@ -13,9 +14,14 @@ import org.springframework.security.config.annotation.web.configurers.HttpBasicC
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.project.jobseek.company.permission.enums.CompanyEntityPermissions;
 import com.project.jobseek.config.filters.AuthenticationFilter;
+import com.project.jobseek.role.permission.enums.EntityRolePermission;
+import com.project.jobseek.role.permission.template.EnumPermission;
+import com.project.jobseek.utils.constants.EntityConstants;
 
 @Configuration
+@EnableMethodSecurity
 public class SecurityConfig
 {
 	@Bean
@@ -24,7 +30,11 @@ public class SecurityConfig
 			.httpBasic(HttpBasicConfigurer::disable)
 			.csrf(CsrfConfigurer::disable)
 			.authorizeHttpRequests( authorize ->
-			authorize.requestMatchers( HttpMethod.POST , "/api/*/users").permitAll()
+			authorize
+				.requestMatchers( HttpMethod.POST , "/api/*/users").permitAll()
+				.requestMatchers( HttpMethod.POST , "/api/*/companies").hasAuthority(
+					EntityConstants.COMPANY + "_" + CompanyEntityPermissions.CAN_CREATE_COMPANY
+				)
 				.anyRequest().authenticated()
 			)
 			.addFilterBefore(

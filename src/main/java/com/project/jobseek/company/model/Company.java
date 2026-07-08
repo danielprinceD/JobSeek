@@ -54,16 +54,14 @@ public class Company
 	@CreationTimestamp
 	private LocalDateTime createdAt;
 
-	@ManyToOne( cascade = CascadeType.PERSIST )
+	@ManyToOne
 	@CreatedBy
-	@OnDelete( action = OnDeleteAction.CASCADE )
 	@JoinColumn( name = "created_by" , referencedColumnName = "userId" , updatable = false)
 	private User createdBy;
 
 	@ManyToOne
 	@LastModifiedBy
 	@JoinColumn( name = "last_modified_by" , referencedColumnName = "userId" )
-	@OnDelete( action = OnDeleteAction.CASCADE)
 	private User lastModifiedBy;
 
 	@UpdateTimestamp

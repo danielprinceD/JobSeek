@@ -46,7 +46,7 @@ public class UserControllerV1
 	@PostMapping("/users")
 	public ResponseEntity<? extends JobSeekResponse<?>> createUser(@Valid  @RequestBody UserRequest userRequest){
 		User user = modelMapper.map(userRequest , User.class);
-		Long roleId = userRequest.getRoleId();
+		Long roleId = userRequest.getUserRole();
 		if(roleId == null){
 			return JobSeekResponse.withResponseEntity(HttpStatus.BAD_REQUEST , "Role ID is required");
 		}

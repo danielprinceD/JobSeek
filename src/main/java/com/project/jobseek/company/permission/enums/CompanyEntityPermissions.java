@@ -14,12 +14,11 @@ public enum CompanyEntityPermissions implements EnumPermission
 
 	public final String displayName;
 	public final String description;
-	public final String name;
+
 	CompanyEntityPermissions(String displayName, String description)
 	{
 		this.displayName = displayName;
 		this.description = description;
-		this.name = this.name();
 	}
 
 }

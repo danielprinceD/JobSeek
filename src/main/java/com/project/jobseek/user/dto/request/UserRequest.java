@@ -18,5 +18,5 @@ public class UserRequest
 	@Email( message = "Email should be valid" )
 	private String email;
 	@NotNull( message = "Role is required" )
-	private Long roleId;
+	private Long userRole;
 }
