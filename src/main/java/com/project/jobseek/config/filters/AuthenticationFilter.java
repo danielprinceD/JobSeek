@@ -24,21 +24,21 @@ public class AuthenticationFilter extends OncePerRequestFilter
 	@Autowired private UserService userService;
 	@Override protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException
 	{
+
 		String userIdInString = request.getHeader("userId");
 		Long userId = Long.valueOf(userIdInString == null || userIdInString.isEmpty() ? "-1" : userIdInString);
-
 		User user = userService.getUserById(userId);
-		if( user == null)
+
+		if(user != null)
 		{
-			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-			return;
+			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+				user, null, List.of()
+			);
+
+			SecurityContextHolder.getContext().setAuthentication(authentication);
 		}
 
-		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-			user , null , List.of()
-		);
 
-		SecurityContextHolder.getContext().setAuthentication(authentication);
 		try{
 			filterChain.doFilter(request, response);
 		}

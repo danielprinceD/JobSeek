@@ -18,6 +18,8 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -52,15 +54,17 @@ public class Company
 	@CreationTimestamp
 	private LocalDateTime createdAt;
 
-	@ManyToOne
+	@ManyToOne( cascade = CascadeType.PERSIST )
 	@CreatedBy
+	@OnDelete( action = OnDeleteAction.CASCADE )
 	@JoinColumn( name = "created_by" , referencedColumnName = "userId" , updatable = false)
 	private User createdBy;
 
 	@ManyToOne
 	@LastModifiedBy
-	@JoinColumn( name = "updated_by" , referencedColumnName = "userId")
-	private User updatedBy;
+	@JoinColumn( name = "last_modified_by" , referencedColumnName = "userId" )
+	@OnDelete( action = OnDeleteAction.CASCADE)
+	private User lastModifiedBy;
 
 	@UpdateTimestamp
 	private LocalDateTime updatedAt;
