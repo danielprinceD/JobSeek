@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 public class InterviewRequest
 {
+	private Long interviewId;
 	@NotNull( message = "Job Apply Id is required" )
 	private Long jobApplyId;
 

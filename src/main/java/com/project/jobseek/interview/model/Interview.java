@@ -8,6 +8,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -21,6 +23,13 @@ import com.project.jobseek.user.model.User;
 
 @Data
 @Entity
+@Table(
+	uniqueConstraints = {
+		@UniqueConstraint(
+			columnNames = { "job_apply_id" , "interviewer_id" }
+		)
+	}
+)
 public class Interview
 {
 	@GeneratedValue( strategy = GenerationType.IDENTITY ) @Id
