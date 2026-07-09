@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +24,7 @@ import com.project.jobseek.interview.enums.InterviewStatus;
 import com.project.jobseek.interview.model.Interview;
 import com.project.jobseek.interview.service.InterviewService;
 import com.project.jobseek.interview.validator.InterviewValidator;
+import com.project.jobseek.jobentity.enums.JobAppliedStatus;
 import com.project.jobseek.utils.responseutils.JobSeekResponse;
 import com.project.jobseek.utils.validator.ValidationResult;
 
@@ -55,9 +58,28 @@ public class InterviewControllerV1
 
 		Interview interview = modelMapper.map(interviewRequest , Interview.class);
 		interview.setInterviewStatus(InterviewStatus.SCHEDULED);
-		Interview savedInterview = interviewService.saveInterview(interview , interviewRequest);
+		Interview savedInterview = interviewService.saveInterview(interview , interviewRequest , jobApply -> jobApply.setStatus(JobAppliedStatus.INTERVIEW_SCHEDULED));
 		InterviewDTO interviewDTO = modelMapper.map(savedInterview , InterviewDTO.class);
 		return JobSeekResponse.withResponseEntity(HttpStatus.CREATED , interviewDTO);
+	}
+
+	@PutMapping("/interviews/{interviewId}")
+	public ResponseEntity<? extends JobSeekResponse<?>> updateInterview( @PathVariable("interviewId") String interviewIdStr , @Valid @RequestBody InterviewRequest interviewRequest){
+
+		ValidationResult interviewValidation = InterviewValidator.validateInterviewMode()
+			.and(InterviewValidator.validateInterviewStatus())
+			.apply(interviewRequest);
+
+		if(!interviewValidation.isValid())
+			return JobSeekResponse.withResponseEntity(HttpStatus.BAD_REQUEST , interviewValidation.getErrors());
+
+		Long interviewId = Long.parseLong(interviewIdStr);
+		Interview interview = modelMapper.map(interviewRequest , Interview.class);
+		interview.setInterviewId(interviewId);
+		Interview updatedInterview = interviewService.updateInterview(interview , interviewRequest);
+		InterviewDTO interviewDTO = modelMapper.map(updatedInterview , InterviewDTO.class);
+		return JobSeekResponse.withResponseEntity(HttpStatus.OK , interviewDTO);
+
 	}
 
 }
