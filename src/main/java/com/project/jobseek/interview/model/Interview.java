@@ -12,6 +12,8 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+import org.springframework.data.annotation.CreatedBy;
+
 import com.project.jobseek.interview.enums.InterviewMode;
 import com.project.jobseek.interview.enums.InterviewStatus;
 import com.project.jobseek.jobentity.model.JobApply;
@@ -26,7 +28,7 @@ public class Interview
 
 	@ManyToOne
 	@JoinColumn( name = "job_apply_id" , referencedColumnName = "jobApplyId" )
-	private JobApply jobApplyId;
+	private JobApply jobApply;
 
 	private LocalDateTime interviewDateTime;
 	private String interviewLocation;
