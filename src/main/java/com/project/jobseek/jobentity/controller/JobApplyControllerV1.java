@@ -49,6 +49,8 @@ public class JobApplyControllerV1
 			return modelMapper.map(jobApply , JobApplyDTO.class);
 		}).toList();
 		jobAppliedUserResponse.setUsers(jobApplyDTOS);
+		if(jobApplyDTOS.isEmpty())
+			return JobSeekResponse.withResponseEntity(HttpStatus.NOT_FOUND, "No Job Apply Found");
 		return JobSeekResponse.withResponseEntity(HttpStatus.OK, jobAppliedUserResponse );
 	}
 
