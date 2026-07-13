@@ -1,12 +1,32 @@
 import { useState } from 'react'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import './css/index.css'
+import Companies from './components/company/Companies'
 import Home from './components/pages/Home'
 import Login from './components/pages/Login'
 
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(true)
-  return isLoggedIn ? <Home isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /> : <Login />
+
+  return (
+    <BrowserRouter>
+      <Routes>
+        {isLoggedIn ? (
+          <>
+            <Route path="/" element={<Home isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} />
+            <Route path="/companies/:companyId" element={<Companies setIsLoggedIn={setIsLoggedIn} />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </>
+        ) : (
+          <>
+            <Route path="/login" element={<Login />} />
+            <Route path="*" element={<Navigate to="/login" replace />} />
+          </>
+        )}
+      </Routes>
+    </BrowserRouter>
+  )
 }
 
 export default App
