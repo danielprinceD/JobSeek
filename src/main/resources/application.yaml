@@ -5,6 +5,11 @@ spring:
   application:
     name: JobSeek
 
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
   datasource:
     url: jdbc:mysql://localhost:3307/jobseek
     username: root
@@ -24,3 +29,4 @@ logging:
   level:
     org.hibernate.SQL: DEBUG
     org.hibernate.orm.jdbc.bind: TRACE
+
