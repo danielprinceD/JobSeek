@@ -21,4 +21,6 @@ import com.project.jobseek.user.model.User;
 public interface ResumeStorageRepository extends JpaRepository<Resume , Long>
 {
 	List<Resume> findByResumeOwnerUserId(Long userId);
+	Resume findByResumeIdAndResumeOwnerUserId(Long resumeId , Long userId);
+	void deleteByResumeIdAndResumeOwnerUserId(Long resumeId , Long userId);
 }

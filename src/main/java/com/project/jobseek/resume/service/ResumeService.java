@@ -61,12 +61,16 @@ public class ResumeService
 
 	}
 
-	public boolean deleteResume(Long resumeId)
+	public boolean deleteResumeForCurrentUser(Long resumeId)
 	{
-		Resume resume = resumeStorageRepository.findById(resumeId).orElseThrow(() -> new RuntimeException("Resume not found"));
+		Resume resume = resumeStorageRepository.findByResumeIdAndResumeOwnerUserId(resumeId , CurrentUser.get().getUserId() );
 
+		if(resume == null){
+			return false;
+		}
 
-		resumeStorageRepository.delete(resume);
+		resumeStorageRepository.deleteByResumeIdAndResumeOwnerUserId(resumeId , CurrentUser.get().getUserId());
+
 		File file = new File(resume.getStoredFilePath());
 		if (file.exists()) {
 			file.delete();

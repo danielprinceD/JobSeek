@@ -11,7 +11,6 @@ public class ResumeDTO
 	private UserResumeDTO resumeOwner;
 
 	private String originalFileName;
-	private String storedFilePath;
 
 	LocalDateTime createdAt;
 	LocalDateTime updatedAt;
