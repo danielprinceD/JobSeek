@@ -1,11 +1,17 @@
 package com.project.jobseek.resume.controller;
 
+import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MimeType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -54,5 +60,26 @@ public class ResumeControllerV1
 
 		return JobSeekResponse.withResponseEntity(HttpStatus.OK,"Resume deleted successfully");
 	}
+
+	@GetMapping("/resumes/{resumeId}/download")
+	public ResponseEntity<?> downloadResume(@PathVariable("resumeId") String resumeStr){
+
+		Long resumeId = Long.parseLong(resumeStr);
+		Resume resume = resumeService.getResumeByIdForCurrentUser(resumeId);
+		if(resume == null)
+			return JobSeekResponse.withResponseEntity(HttpStatus.NOT_FOUND,"Resume not found");
+
+		try{
+			InputStream fileDownload = resumeService.getFileResourceForResume(resume);
+			return ResponseEntity.ok()
+				.header("Content-Disposition", "attachment; filename=\"" + resume.getOriginalFileName() + "\"")
+				.contentType(MediaType.parseMediaType(Files.probeContentType(Path.of(resume.getStoredFilePath()))))
+				.body( fileDownload.readAllBytes());
+		}
+		catch(Exception e){
+			return JobSeekResponse.withResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR,"Failed to download resume");
+		}
+	}
+
 
 }

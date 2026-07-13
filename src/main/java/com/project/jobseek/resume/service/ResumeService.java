@@ -2,6 +2,7 @@ package com.project.jobseek.resume.service;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
@@ -31,6 +32,11 @@ public class ResumeService
 	{
 		User currentUser = CurrentUser.get();
 		return resumeStorageRepository.findByResumeOwnerUserId(CurrentUser.get().getUserId());
+	}
+
+	public Resume getResumeByIdForCurrentUser(Long resumeId)
+	{
+		return resumeStorageRepository.findByResumeIdAndResumeOwnerUserId(resumeId , CurrentUser.get().getUserId());
 	}
 
 	public Resume storeResume(MultipartFile file ){
@@ -77,6 +83,11 @@ public class ResumeService
 		}
 		return true;
 
+	}
+
+	public InputStream getFileResourceForResume(Resume resume) throws IOException
+	{
+		return Files.newInputStream( Path.of(resume.getStoredFilePath()) );
 	}
 
 }
