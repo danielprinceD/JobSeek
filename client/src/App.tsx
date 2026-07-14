@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import CompanyDetailsPage from './components/company/CompanyDetailPage'
 import './css/index.css'
 import Companies from './components/company/Companies'
 import Home from './components/pages/Home'
@@ -15,7 +16,8 @@ function App() {
         {isLoggedIn ? (
           <>
             <Route path="/" element={<Home isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} />
-            <Route path="/companies/:companyId" element={<Companies setIsLoggedIn={setIsLoggedIn} />} />
+            <Route path="/companies" element={<Companies setIsLoggedIn={setIsLoggedIn} />} />
+            <Route path="/companies/:companyId" element={<CompanyDetailsPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </>
         ) : (

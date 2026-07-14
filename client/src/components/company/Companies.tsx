@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { Company as CompanyData, CompaniesResponse } from './company.types'
+import { Link } from 'react-router-dom'
 
 type CompanyPageProps = {
 	setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
@@ -61,6 +62,7 @@ function Companies({ setIsLoggedIn }: CompanyPageProps) {
 								All companies
 							</h1>
 						</div>
+						
 
 						<button
 							type="button"
@@ -111,13 +113,27 @@ function Companies({ setIsLoggedIn }: CompanyPageProps) {
 										<p>
 											<span className="font-medium text-slate-500">Website:</span> {company.companyWebsite ?? 'Not provided'}
 										</p>
+
+
+										
 									</div>
+									
+									<Link to={`/companies/${company.companyId}`}
+										className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-sky-700 transition hover:text-sky-800"
+									>
+										View details
+										<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-4 w-4">
+											<path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
+										</svg>
+									</Link>
+
+
 								</article>
 							))}
 						</div>
 					)}
 				</div>
-			</div>
+			</div> 
 		</main>
 	)
 }
