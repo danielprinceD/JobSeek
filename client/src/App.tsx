@@ -5,6 +5,7 @@ import './css/index.css'
 import Companies from './components/company/Companies'
 import Home from './components/pages/Home'
 import Login from './components/pages/Login'
+import { DepartmentJobDetailsPage } from './components/departments/DepartmentJobDetailsPage'
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
             <Route path="/" element={<Home isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} />
             <Route path="/companies" element={<Companies setIsLoggedIn={setIsLoggedIn} />} />
             <Route path="/companies/:companyId" element={<CompanyDetailsPage />} />
+            <Route path="/departments/:departmentId/jobs" element={<DepartmentJobDetailsPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </>
         ) : (

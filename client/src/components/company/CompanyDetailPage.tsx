@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { API_BASE_URL, USER_ID } from "../../../properties";
+import { DepartmentList } from "../departments/DepartmentList";
 
 interface CompanyDetailPageProps {
     companyId: string;
@@ -27,15 +29,14 @@ function CompanyDetailPage( ) {
 
     useEffect(() => {
 
-        const controller = new AbortController();
+
         
         async function loadCompanyDetails() {
             try {
-                const response = await fetch(`http://localhost:8080/api/v1/companies/${companyId}`, {
-                    signal: controller.signal,
+                const response = await fetch(`${API_BASE_URL}/companies/${companyId}`, {
+
                     headers: {
-                        'Content-Type': 'application/json',
-                        'userId': '5', // Replace with the actual user ID if needed
+                        'userId': USER_ID, // Replace with the actual user ID if needed
                     },
                 });
 
@@ -71,6 +72,7 @@ function CompanyDetailPage( ) {
             <p className="text-lg font-medium text-slate-700 mb-4">Company ID: {companyId}</p>
 
             {companyDetails ? (
+                <>
                 <div className="rounded-[2rem] border border-white/70 bg-white/80 p-8 shadow-[0_30px_80px_rgba(30,41,59,0.12)] backdrop-blur sm:p-10">
                     <h1 className="text-4xl font-semibold tracking-tight text-slate-900 mb-6">{companyDetails.companyName}</h1>
                     <p className="text-lg font-medium text-slate-700 mb-2">Email: {companyDetails.companyEmail}</p>
@@ -79,6 +81,13 @@ function CompanyDetailPage( ) {
                     <p className="text-lg font-medium text-slate-700 mb-2">Phone: {companyDetails.companyPhone}</p>
                     <p className="text-lg font-medium text-slate-700 mb-2">Address: {companyDetails.companyAddress?.street}, {companyDetails.companyAddress?.city}, {companyDetails.companyAddress?.state}, {companyDetails.companyAddress?.zipCode}, {companyDetails.companyAddress?.country}</p>
                 </div>
+
+                <div className="mt-8">
+                    <DepartmentList companyId={companyId || ''} />
+                </div>
+
+                </>
+
             ) : (
                 <p className="text-lg font-medium text-slate-700">Loading company details...</p>
             )}

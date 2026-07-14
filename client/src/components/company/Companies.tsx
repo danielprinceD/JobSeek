@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { Company as CompanyData, CompaniesResponse } from './company.types'
 import { Link } from 'react-router-dom'
+import { API_BASE_URL , USER_ID } from '../../../properties'
 
 type CompanyPageProps = {
 	setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
@@ -12,18 +13,16 @@ function Companies({ setIsLoggedIn }: CompanyPageProps) {
 	const [errorMessage, setErrorMessage] = useState('')
 
 	useEffect(() => {
-		const controller = new AbortController()
-
+		
 		async function loadCompanies() {
 			try {
 				setIsLoading(true)
 				setErrorMessage('')
 
-				const response = await fetch('http://localhost:8080/api/v1/companies', {
-					signal: controller.signal,
+				const response = await fetch(`${API_BASE_URL}/companies`, {
+				
 					headers: {
-						'Content-Type': 'application/json',
-						userId: '5',
+						userId: USER_ID ,
 					},
 				})
 
@@ -44,10 +43,9 @@ function Companies({ setIsLoggedIn }: CompanyPageProps) {
 			}
 		}
 
-		void loadCompanies()
+		loadCompanies()
 
-		return () => controller.abort()
-	}, [])
+	}, [1])
 
 	return (
 		<main className="min-h-screen bg-[radial-gradient(circle_at_top,_#dbeafe,_#eff6ff_35%,_#f8fafc_75%)] px-6 py-10 text-slate-900">
