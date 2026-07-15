@@ -25,8 +25,8 @@ public class InterviewService
 	@Autowired JobApplyRepository jobApplyRepository;
 	@Autowired ModelMapper modelMapper;
 
-	public List<Interview> getAllInterviewsByJobApplyId(Long jobApplyId){
-		return interviewRepository.findAllByJobApplyJobApplyId(jobApplyId);
+	public Interview getInterviewsByJobApplyId(Long jobApplyId){
+		return interviewRepository.findAllByJobApplyJobApplyId(jobApplyId).stream().findFirst().orElse(null);
 	}
 
 	public Interview saveInterview(Interview interview , InterviewRequest interviewRequest , Consumer<JobApply> jobApplyCustomizer ) {

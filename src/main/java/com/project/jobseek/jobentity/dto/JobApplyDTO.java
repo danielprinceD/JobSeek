@@ -11,4 +11,5 @@ public class JobApplyDTO
 	Long jobApplyId;
 	UserDTO user;
 	JobAppliedStatus status;
+	JobDTO job;
 }

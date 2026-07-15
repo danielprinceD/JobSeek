@@ -40,8 +40,7 @@ public class InterviewControllerV1
 	{
 		Long jobApplyId = Long.parseLong(jobApplyIdStr);
 
-		List<InterviewDTO> interviews = interviewService.getAllInterviewsByJobApplyId(jobApplyId).stream()
-			.map( interview -> modelMapper.map(interview , InterviewDTO.class) ).collect(Collectors.toList());
+		InterviewDTO interviews = modelMapper.map(interviewService.getInterviewsByJobApplyId(jobApplyId) , InterviewDTO.class);
 
 		return JobSeekResponse.withResponseEntity(HttpStatus.OK , interviews);
 
