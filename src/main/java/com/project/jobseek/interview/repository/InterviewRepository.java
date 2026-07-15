@@ -11,5 +11,4 @@ import com.project.jobseek.interview.model.Interview;
 public interface InterviewRepository extends JpaRepository<Interview , Long>
 {
 	public List<Interview> findAllByJobApplyJobApplyId(Long jobApplyId);
-
 }

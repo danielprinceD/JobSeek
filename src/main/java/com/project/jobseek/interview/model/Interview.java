@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
@@ -36,7 +37,7 @@ public class Interview
 	private Long interviewId;
 
 	@ManyToOne
-	@JoinColumn( name = "job_apply_id" , referencedColumnName = "jobApplyId" )
+	@JoinColumn( name = "job_apply_id" , referencedColumnName = "jobApplyId" , unique = true)
 	private JobApply jobApply;
 
 	private LocalDateTime interviewDateTime;
