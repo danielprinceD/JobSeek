@@ -44,6 +44,9 @@ export function AppliedCandidates() {
                 const appliedCandidatesData = data?.result || {};
                 const candidates = appliedCandidatesData?.users || [];
                 setAppliedCandidates(candidates);
+                if(candidates.length === 0){
+                    setErrorMessage('No candidates have applied for this job yet.');
+                }
             } catch (error) {
                 setErrorMessage('Failed to load applied candidates');
             }
@@ -71,7 +74,7 @@ export function AppliedCandidates() {
                             </div>
                         </>
                     ) : (
-                        <p>No candidates have applied for this job yet.</p>
+                       <p>  </p>
                     )}
                 </div>
             </div>

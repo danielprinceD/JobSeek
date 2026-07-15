@@ -43,14 +43,11 @@ public class JobApplyControllerV1
 		Long jobIdLong = Long.parseLong(jobId);
 		List<JobApply> jobApplyList = jobService.getJobAppliedByJobId(jobIdLong);
 		JobAppliedUserResponse jobAppliedUserResponse = new JobAppliedUserResponse();
-		List<JobApplyDTO> jobApplyDTOS = jobApplyList.stream().map(jobApply -> {
-			if(jobAppliedUserResponse.getJob() == null)
-				jobAppliedUserResponse.setJob(modelMapper.map(jobApply.getJob() , JobDTO.class));
-			return modelMapper.map(jobApply , JobApplyDTO.class);
-		}).toList();
+		if(jobAppliedUserResponse.getJob() == null)
+			jobAppliedUserResponse.setJob(modelMapper.map(jobService.getJobById(jobIdLong) , JobDTO.class));
+		List<JobApplyDTO> jobApplyDTOS = jobApplyList.stream().map(jobApply -> modelMapper.map(jobApply , JobApplyDTO.class)).toList();
 		jobAppliedUserResponse.setUsers(jobApplyDTOS);
-		if(jobApplyDTOS.isEmpty())
-			return JobSeekResponse.withResponseEntity(HttpStatus.NOT_FOUND, "No Job Apply Found");
+
 		return JobSeekResponse.withResponseEntity(HttpStatus.OK, jobAppliedUserResponse );
 	}
 
