@@ -59,6 +59,17 @@ function Companies({ setIsLoggedIn }: CompanyPageProps) {
 							<h1 className="text-4xl font-semibold tracking-tight text-slate-900">
 								All companies
 							</h1>
+
+						</div>
+						<div className="flex items-center gap-4">
+							<p className="text-sm text-slate-500">Logged in as User ID: {USER_ID}</p>
+						</div>
+					</div>
+
+					<div className="mt-6 flex items-center justify-between gap-4 sm:mt-8">
+						<div className="flex items-center gap-2">
+							<p className="text-sm text-slate-500">Total companies:</p>
+							<p className="text-sm font-medium text-slate-900">{companies.length}</p>
 						</div>
 						
 
@@ -70,6 +81,17 @@ function Companies({ setIsLoggedIn }: CompanyPageProps) {
 							Logout
 						</button>
 					</div>
+
+					
+					<div className="mt-6">
+						<button
+							type="button"
+							className="inline-flex h-fit items-center justify-center rounded-2xl bg-slate-900 px-5 py-3 text-base font-semibold text-white transition hover:bg-slate-800 focus:outline-none focus:ring-4 focus:ring-slate-300"
+						>
+							Add Company
+						</button>
+					</div>
+					
 
 					{isLoading ? (
 						<div className="mt-8 rounded-3xl border border-slate-200 bg-slate-50 p-8 text-sm text-slate-500">

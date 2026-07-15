@@ -45,9 +45,13 @@ export function DepartmentList({ companyId }: { companyId: string }) {
       <ul>
         {departments.map((department) => (
             <div className="border border-gray-300 rounded p-4 mb-4" key={department.departmentId}>
-                <li key={department.departmentId} >
-                    {department.departmentName} - {department.departmentDescription}
+                <li key={department.departmentId} className="text-lg font-medium text-slate-700 mb-2">
+                    Name : {department.departmentName}
                 </li>
+
+                <p className="text-lg font-medium text-slate-700 mb-2">Description : {department.departmentDescription}</p>
+                
+
                 <Link to={`/departments/${department.departmentId}/jobs`} className="text-blue-500 hover:underline">
                     View Details
                 </Link>

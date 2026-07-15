@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { API_BASE_URL, USER_ID } from "../../../properties";
 
 
@@ -47,16 +47,34 @@ return (
             <div className="rounded-[2rem] border border-white/70 bg-white/80 p-8 shadow-[0_30px_80px_rgba(30,41,59,0.12)] backdrop-blur sm:p-10">
                 {errorMessage && <p>{errorMessage}</p>}
                 {jobList ? (
-                    <div>
-                        {jobList.map((job) => (
-                            <div key={job.jobId}>
-                                <h1 className="text-4xl font-semibold tracking-tight text-slate-900 mb-4">{job.jobTitle}</h1>
-                                <p className="text-lg font-medium text-slate-700">{job.jobDescription}</p>
-                                <p className="text-lg font-medium text-slate-700">{job.jobLocation}</p>
-                                <p className="text-lg font-medium text-slate-700">{job.jobStatus}</p>
-                            </div>
-                        ))}
-                    </div>
+                    <>
+                        <h1 className="text-4xl font-semibold tracking-tight text-slate-900 mb-4">Jobs in Department {departmentId}</h1>
+                        <div>
+                            {jobList.map((job) => (
+                                // card UI 
+                                
+                                <>
+                                    <div className="border border-gray-300 rounded p-4 mb-4" key={job.jobId}>
+                                        <h2 className="text-2xl font-semibold tracking-tight text-slate-900 mb-2">{job.jobTitle}</h2>
+                                        <p className="text-lg font-medium text-slate-700 mb-2">Location: {job.jobLocation}</p>
+                                        <p className="text-lg font-medium text-slate-700 mb-2">Status: {job.jobStatus}</p>
+                                        <p className="text-lg font-medium text-slate-700 mb-2">Description: {job.jobDescription || 'No description available'}</p>
+                                    
+                                        <Link to={`/jobs/${job.jobId}/candidates`} className="text-blue-500 hover:underline">
+                                            View Applied Candidates
+                                        </Link>
+                                    </div>
+
+                                    
+
+                                </>
+                            
+                            ))}
+
+                            
+
+                        </div>
+                    </>
                 ) : (
                     <p className="text-lg font-medium text-slate-700">Loading department details...</p>
                 )}
