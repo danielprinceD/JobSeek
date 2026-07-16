@@ -2,50 +2,262 @@ import { useEffect, useState } from 'react'
 import type { Company as CompanyData, CompaniesResponse } from './company.types'
 import { Link } from 'react-router-dom'
 import { API_BASE_URL , USER_ID } from '../../../properties'
+import type { CompanyCreationForm } from '../types/FormType'
+import { FormPopupTemplate } from '../Utils/FormPopupTemplate'
+
 
 type CompanyPageProps = {
 	setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+
+function CompanyCreationPopupForm({ onClose, onSuccess }: { onClose: () => void; onSuccess: () => void }) {
+	const [companyDetails , setCompanyDetails] = useState<CompanyCreationForm | null>({} as CompanyCreationForm)
+	const [isSubmitting, setIsSubmitting] = useState(false)
+	const [errorMessage, setErrorMessage] = useState('')
+
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault()
+		const response = await fetch(`${API_BASE_URL}/companies`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'userId' : USER_ID,
+			},
+			body: JSON.stringify(companyDetails),
+		})
+
+		const data = await response.json()
+		
+		console.log('Response:', response)
+		console.log('Data:', data)
+
+		if (!response.status || response.status !== 201) {
+			if (data && data['result'] ) {
+				setErrorMessage(data['result'])
+			} else {
+				setErrorMessage('Failed to create company. Please try again.')
+			}
+			return
+		}
+		// Handle form submission here
+		onClose()
+		onSuccess()
+	}
+
+	return (
+		<FormPopupTemplate
+			title="Add Company"
+			subtitle="Fill in the details below to create a new company."
+			onClose={onClose}
+			errorMessage={errorMessage}
+		>
+			<form onSubmit={handleSubmit} className="space-y-6">
+					
+					{/* Form Fields */}
+					<div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+						<div>
+							<label htmlFor="companyName" className="block text-sm font-medium text-slate-700">Company Name</label>
+							<input
+								type="text"
+								name="companyName"
+								id="companyName"
+								onChange={(e) => setCompanyDetails({ ...companyDetails, companyName: e.target.value ?? null } as CompanyCreationForm)}
+								required
+								className="mt-1 block w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+							/>
+						</div>
+
+						<div>
+							<label htmlFor="companyEmail" className="block text-sm font-medium text-slate-700">Company Email</label>
+							<input
+								type="email"
+								name="companyEmail"
+								id="companyEmail"
+								onChange={(e) => setCompanyDetails({ ...companyDetails, companyEmail: e.target.value ?? null } as CompanyCreationForm)}
+								required
+								className="mt-1 block w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+							/>
+						</div>
+						
+						<div>
+							<label htmlFor="companyPhone" className="block text-sm font-medium text-slate-700">Company Phone</label>
+							<input
+								type="tel"
+								name="companyPhone"
+								id="companyPhone"
+								onChange={(e) => setCompanyDetails({ ...companyDetails, companyPhone: e.target.value ?? null } as CompanyCreationForm)}
+								className="mt-1 block w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+							/>
+						</div>
+
+						<div>
+							<label htmlFor="companyWebsite" className="block text-sm font-medium text-slate-700">Company Website</label>
+							<input
+								type="url"
+								name="companyWebsite"
+								id="companyWebsite"
+								onChange={(e) => setCompanyDetails({
+								...companyDetails,
+								companyWebsite : e.target.value ?? null
+								} as CompanyCreationForm)}
+								className="mt-1 block w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+							/>
+						</div>
+						
+						<div className="sm:col-span-2">
+							<label htmlFor="companyDescription" className="block text-sm font-medium text-slate-700">Company Description</label>
+							<textarea
+								name="companyDescription"
+								id="companyDescription"
+								rows={4}
+								onChange={(e) => setCompanyDetails({ ...companyDetails, companyDescription: e.target.value ?? null } as CompanyCreationForm)}
+								className="mt-1 block w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+							></textarea>
+						</div>
+
+						<div>
+							<label htmlFor="state" className="block text-sm font-medium text-slate-700">State</label>
+							<input
+								type="text"
+								onChange={(e) => setCompanyDetails({ 
+								...companyDetails,  
+								companyAddress : { 
+									...companyDetails?.companyAddress,  
+									state : e.target.value ?? null
+								} 
+								} as CompanyCreationForm)}
+								name="state"
+								id="state"
+								className="mt-1 block w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+							/>
+						</div>
+
+						<div>
+							<label htmlFor="country" className="block text-sm font-medium text-slate-700">Country</label>
+							<input
+								type="text"
+								name="country"
+								id="country"
+								onChange={(e) => setCompanyDetails({ 
+								...companyDetails,  
+								companyAddress : { 
+									...companyDetails?.companyAddress,  
+									country : e.target.value ?? null
+								} 
+								} as CompanyCreationForm)}
+								className="mt-1 block w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+							/>
+						</div>
+
+						<div>
+							<label htmlFor="street" className="block text-sm font-medium text-slate-700">Street</label>
+							<input
+								type="text"
+								name="street"
+								id="street"
+								onChange={(e) => setCompanyDetails({
+								...companyDetails,
+								companyAddress : {
+									...companyDetails?.companyAddress,
+									street : e.target.value ?? null
+								}
+								} as CompanyCreationForm)}
+								className="mt-1 block w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+							/>
+						</div>
+
+						<div>
+							<label htmlFor="city" className="block text-sm font-medium text-slate-700">City</label>
+							<input
+								type="text"
+								name="city"
+								id="city"
+								className="mt-1 block w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+							/>
+						</div>
+
+						<div>
+							<label htmlFor="zipCode" className="block text-sm font-medium text-slate-700">Zip Code</label>
+							<input
+								type="text"
+								name="zipCode"
+								id="zipCode"
+								onChange={(e) => setCompanyDetails({
+								...companyDetails,
+								companyAddress : {
+									...companyDetails?.companyAddress,
+									zipCode : e.target.value ?? null
+								}
+								} as CompanyCreationForm)}
+								className="mt-1 block w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+							/>
+						</div>
+
+					</div>
+					
+					<div className="flex items-center justify-end gap-4">
+						<button
+							type="button"
+							onClick={onClose}
+							className="rounded-lg bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-200 transition-colors duration-200"
+						>
+							Cancel
+						</button>
+						<button
+							type="submit"
+							disabled={isSubmitting}
+							className={`rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors duration-200 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'}`}
+						>
+							{isSubmitting ? 'Creating...' : 'Create Company'}
+						</button>
+					</div>
+					
+
+				</form>
+		</FormPopupTemplate>
+	)
+	
+}
+
 function Companies({ setIsLoggedIn }: CompanyPageProps) {
 	const [companies, setCompanies] = useState<CompanyData[]>([])
+	const [companyCreationPopupOpen, setCompanyCreationPopupOpen] = useState(false)
 	const [isLoading, setIsLoading] = useState(true)
 	const [errorMessage, setErrorMessage] = useState('')
 
-	useEffect(() => {
-		
-		async function loadCompanies() {
-			try {
-				setIsLoading(true)
-				setErrorMessage('')
+	async function loadCompanies() {
+		try {
+			setIsLoading(true)
+			setErrorMessage('')
 
-				const response = await fetch(`${API_BASE_URL}/companies`, {
-				
-					headers: {
-						userId: USER_ID ,
-					},
-				})
+			const response = await fetch(`${API_BASE_URL}/companies`, {
+			
+				headers: {
+					userId: USER_ID ,
+				},
+			})
 
-				if (!response.ok) {
-					throw new Error(`Request failed with status ${response.status}`)
-				}
-
-				const data: CompaniesResponse = await response.json()
-				setCompanies(Array.isArray(data.result) ? data.result : [])
-			} catch (error) {
-				if (error instanceof DOMException && error.name === 'AbortError') {
-					return
-				}
-
-				setErrorMessage('Unable to load companies right now.')
-			} finally {
-				setIsLoading(false)
+			if (!response.ok) {
+				throw new Error(`Request failed with status ${response.status}`)
 			}
+
+			const data: CompaniesResponse = await response.json()
+			setCompanies(Array.isArray(data.result) ? data.result : [])
+		} catch (error) {
+			if (error instanceof DOMException && error.name === 'AbortError') {
+				return
+			}
+
+			setErrorMessage('Unable to load companies right now.')
+		} finally {
+			setIsLoading(false)
 		}
+	}
 
+	useEffect(() => {
 		loadCompanies()
-
-	}, [1])
+	}, [])
 
 	return (
 		<main className="min-h-screen bg-[radial-gradient(circle_at_top,_#dbeafe,_#eff6ff_35%,_#f8fafc_75%)] px-6 py-10 text-slate-900">
@@ -75,7 +287,7 @@ function Companies({ setIsLoggedIn }: CompanyPageProps) {
 
 						<button
 							type="button"
-							onClick={() => setIsLoggedIn(false)}
+							onClick={() => setIsLoggedIn(false) }
 							className="inline-flex h-fit items-center justify-center rounded-2xl bg-slate-900 px-5 py-3 text-base font-semibold text-white transition hover:bg-slate-800 focus:outline-none focus:ring-4 focus:ring-slate-300"
 						>
 							Logout
@@ -86,11 +298,16 @@ function Companies({ setIsLoggedIn }: CompanyPageProps) {
 					<div className="mt-6">
 						<button
 							type="button"
+							onClick={() => setCompanyCreationPopupOpen(true)}
 							className="inline-flex h-fit items-center justify-center rounded-2xl bg-slate-900 px-5 py-3 text-base font-semibold text-white transition hover:bg-slate-800 focus:outline-none focus:ring-4 focus:ring-slate-300"
 						>
 							Add Company
 						</button>
 					</div>
+
+					{companyCreationPopupOpen && (
+						<CompanyCreationPopupForm onClose={() => setCompanyCreationPopupOpen(false)} onSuccess={loadCompanies}/>
+					)}
 					
 
 					{isLoading ? (
