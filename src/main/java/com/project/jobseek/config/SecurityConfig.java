@@ -8,11 +8,14 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
+import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 import com.project.jobseek.company.permission.enums.CompanyEntityPermissions;
 import com.project.jobseek.config.filters.AuthenticationFilter;
@@ -27,6 +30,7 @@ public class SecurityConfig
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http , AuthenticationFilter authFilter) throws Exception{
 		http.formLogin(FormLoginConfigurer::disable)
+			.cors(cors -> cors.configurationSource(corsConfigurationSource()))
 			.httpBasic(HttpBasicConfigurer::disable)
 			.csrf(CsrfConfigurer::disable)
 			.authorizeHttpRequests( authorize ->
@@ -44,6 +48,16 @@ public class SecurityConfig
 
 		;
 		return http.build();
+	}
+
+	@Bean public CorsConfigurationSource corsConfigurationSource(){
+		return request -> {
+			CorsConfiguration cors = new CorsConfiguration();
+			cors.setAllowedOrigins(java.util.List.of("*"));
+			cors.setAllowedMethods(java.util.List.of("GET","POST","PUT","DELETE","OPTIONS"));
+			cors.setAllowedHeaders(java.util.List.of("*"));
+			return cors;
+		};
 	}
 
 }
