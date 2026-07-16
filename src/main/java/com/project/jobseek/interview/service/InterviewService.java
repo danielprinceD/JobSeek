@@ -36,7 +36,6 @@ public class InterviewService
 	public Interview updateInterview(Interview interview , InterviewRequest interviewRequest) {
 		Interview existingInterview = interviewRepository.findById(interview.getInterviewId()).orElseThrow(()-> new RuntimeException("Interview not found with id: " + interview.getInterviewId()));
 		modelMapper.map( interview , existingInterview );
-
 		return saveInterview( existingInterview , interviewRequest  , j -> {} );
 
 	}

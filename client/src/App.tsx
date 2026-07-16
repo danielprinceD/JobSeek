@@ -7,6 +7,7 @@ import Home from './components/pages/Home'
 import Login from './components/pages/Login'
 import { DepartmentJobDetailsPage } from './components/departments/DepartmentJobDetailsPage'
 import  {AppliedCandidates} from './components/candidates/AppliedCandidates'
+import { CandidateStatus } from './components/candidates/CandidateStatus'
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
             <Route path="/departments/:departmentId/jobs" element={<DepartmentJobDetailsPage />} />
             <Route path="/jobs/:jobId/candidates" element={ <AppliedCandidates /> } />
             <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="/interview/:jobApplyId" element={<CandidateStatus />} />
           </>
         ) : (
           <>
