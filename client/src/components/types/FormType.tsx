@@ -27,3 +27,12 @@ export type JobCreationForm = {
     jobLocation: string;
     jobStatus: string;
 };
+
+export type InterviewScheduleForm = {
+    jobApplyId: number;
+    interviewDateTime: string; // ISO 8601 format
+    interviewLocation: string | null;
+    interviewMode: string | null;
+    interviewStatus: string | null;
+    interviewerUserId: number;
+};
