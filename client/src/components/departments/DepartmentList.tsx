@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { API_BASE_URL, USER_ID } from '../../../properties';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import type { DepartmentCreationForm } from '../types/FormType';
 import { FormPopupTemplate } from '../Utils/FormPopupTemplate';
 
@@ -57,13 +57,15 @@ export function DepartmentList({ companyId }: { companyId: string }) {
 
   return (
     <div className="mt-8">
-      <h2 className="text-3xl font-bold text-slate-900 mb-2">🏢 Departments</h2>
-      <button
-        className="mb-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300"
-        onClick={() => setDepartmentPopupOpen(true)}
-      >
-        Add Department
-      </button>
+      <div className="flex items-center justify-between gap-4 mb-8">
+        <h2 className="text-3xl font-bold text-slate-900">📁 Departments</h2>
+        <button
+          className="px-5 py-2.5 bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-200"
+          onClick={() => setDepartmentPopupOpen(true)}
+        >
+          + Add Department
+        </button>
+      </div>
 
         {departmentPopupOpen && (
             <DepartmentCreationPopupForm
@@ -117,7 +119,7 @@ export function DepartmentList({ companyId }: { companyId: string }) {
                   {/* Action Button */}
                   <Link 
                       to={`/departments/${department.departmentId}/jobs`}
-                      className="block w-full text-center bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 transform hover:-translate-y-0.5 shadow-md hover:shadow-lg"
+                      className="block w-full text-center bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 transform hover:-translate-y-0.5 shadow-md hover:shadow-lg"
                   >
                       View Jobs & Details →
                   </Link>
@@ -181,46 +183,53 @@ function DepartmentCreationPopupForm({ onClose, onSuccess , companyId }: { onClo
     
     return (
         <FormPopupTemplate onClose={onClose} title="Create New Department" subtitle="Fill in the details below to create a new department." errorMessage={errorMessage}>
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-5">
+                
+                {/* Department Name */}
                 <div>
-                    <label htmlFor="departmentName" className="block text-sm font-medium text-slate-800">Department Name</label>
+                    <label htmlFor="departmentName" className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">📁 Department Name</label>
                     <input
                         type="text"
                         name="departmentName"
                         id="departmentName"
+                        placeholder="e.g. Engineering, Sales, HR"
                         value={departmentDetails.departmentName || ''}
                         onChange={handleInputChange}
                         required
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 sm:text-sm"
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 text-sm transition-all duration-200 focus:outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
                     />
                 </div>
 
+                {/* Department Description */}
                 <div>
-                    <label htmlFor="departmentDescription" className="block text-sm font-medium text-slate-700">Department Description</label>
+                    <label htmlFor="departmentDescription" className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">📝 Description</label>
                     <textarea
                         name="departmentDescription"
                         id="departmentDescription"
+                        rows={3}
+                        placeholder="Describe the department's role and responsibilities..."
                         value={departmentDetails.departmentDescription || ''}
                         onChange={handleInputChange}
                         required
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 sm:text-sm"
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 text-sm transition-all duration-200 focus:outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100 resize-none"
                     />
                 </div>
 
-                <div className="flex justify-end space-x-4">
+                {/* Actions */}
+                <div className="flex items-center justify-end gap-3 pt-2 border-t border-slate-100">
                     <button
                         type="button"
                         onClick={onClose}
-                        className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors duration-300"
+                        className="px-5 py-2.5 rounded-xl text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors duration-200"
                     >
                         Cancel
                     </button>
                     <button
                         type="submit"
                         disabled={isSubmitting}
-                        className={`px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        className={`px-6 py-2.5 rounded-xl text-sm font-semibold text-white bg-linear-to-r from-blue-600 to-indigo-600 shadow-md transition-all duration-200 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:from-blue-700 hover:to-indigo-700 hover:shadow-lg'}`}
                     >
-                        {isSubmitting ? 'Creating...' : 'Create Department'}
+                        {isSubmitting ? 'Creating...' : 'Create Department →'}
                     </button>
                 </div>
             </form>

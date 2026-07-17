@@ -90,7 +90,7 @@ function CompanyCreationPopupForm({ onClose, onSuccess }: { onClose: () => void;
 							type="tel"
 							name="companyPhone"
 							id="companyPhone"
-							placeholder="+1 (555) 000-0000"
+							placeholder="+91 1234567890"
 							onChange={(e) => setCompanyDetails({ ...companyDetails, companyPhone: e.target.value ?? null } as CompanyCreationForm)}
 							className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 text-sm transition-all duration-200 focus:outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
 						/>
