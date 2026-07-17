@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type JSX } from "react";
 import { Link, useParams } from "react-router-dom";
 import { API_BASE_URL, USER_ID } from "../../../properties";
 import type { JobCreationForm } from "../types/FormType";
 import { FormPopupTemplate } from "../Utils/FormPopupTemplate";
-
+import { MessagePopup } from "../Utils/MessagePopup";
 
 type JobListType = {
     jobDescription: string | null;
@@ -21,6 +21,7 @@ export function DepartmentJobDetailsPage() {
     const [errorMessage, setErrorMessage] = useState('');
     const [loading, setLoading] = useState(true);
     const [departmentJobPopupOpen, setDepartmentJobPopupOpen] = useState(false);
+    const [messagePopupElement , setMessagePopupElement] = useState<JSX.Element | null>(null);
 
     const getStatusBadgeColor = (status: string) => {
         switch (status?.toUpperCase()) {
@@ -36,6 +37,54 @@ export function DepartmentJobDetailsPage() {
                 return 'bg-gray-100 text-gray-800';
         }
     };
+
+    const handleJobApply = async (e: React.MouseEvent<HTMLButtonElement>, jobId: number) => {
+        e.preventDefault();
+        try {
+            const response = await fetch(`${API_BASE_URL}/jobs/${jobId}/apply`, {
+            method: 'POST',
+            headers: {
+                'userId': USER_ID,
+                'Content-Type': 'application/json',
+            },
+            });
+            if (!response.ok) {
+                const data = await response.json();
+                if (data && data['result']) {
+                    throw new Error(data.message);
+                }
+                throw new Error('Failed to apply for the job');
+            }
+
+            setMessagePopupElement(
+                <MessagePopup
+                    subject="Job Application Successful"
+                    body="You have successfully applied for the job."
+                    messageType="success"
+                    popupSeconds={5}
+                    onClose={() => setMessagePopupElement(null)}
+                />
+            )
+            
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                setErrorMessage(error.message);
+            } else {
+                setErrorMessage('An unknown error occurred while applying for the job');
+            }
+            setMessagePopupElement(
+                    <MessagePopup
+                        subject="Job Application Failed"
+                        body={error instanceof Error ? error.message : 'Failed to apply for the job'}
+                        messageType="error"
+                        popupSeconds={5}
+                        onClose={() => setMessagePopupElement(null)}
+                    />
+                );
+        }
+
+    }
 
      async function loadDepartmentDetails() {
             try {
@@ -75,6 +124,8 @@ export function DepartmentJobDetailsPage() {
     }
 
     return (
+        <>
+        {messagePopupElement}
         
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 px-6 py-12 text-slate-900">
             <div className="mx-auto max-w-6xl">
@@ -117,6 +168,7 @@ export function DepartmentJobDetailsPage() {
                                     key={job.jobId}
                                     className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-105 p-6 border border-slate-100"
                                 >
+                            
                                     {/* Job Header */}
                                     <div className="mb-4">
                                         <h3 className="text-xl font-bold text-slate-900 mb-2">
@@ -157,6 +209,11 @@ export function DepartmentJobDetailsPage() {
                                     >
                                         View Candidates →
                                     </Link>
+
+                                    <button onClick={(e)=>handleJobApply(e , job.jobId)} className="mt-4 w-full text-center bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 transform hover:-translate-y-0.5 shadow-md hover:shadow-lg">
+                                        Apply
+                                    </button>
+
                                 </div>
                             ))}
                         </div>
@@ -172,6 +229,7 @@ export function DepartmentJobDetailsPage() {
                 )}
             </div>
         </div>
+        </>
     );
 }
 

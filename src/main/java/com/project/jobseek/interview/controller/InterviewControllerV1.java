@@ -49,7 +49,7 @@ public class InterviewControllerV1
 	@PostMapping("/interviews")
 	public ResponseEntity<? extends JobSeekResponse<?>> createInterview(@Valid @RequestBody InterviewRequest interviewRequest){
 
-		ValidationResult interviewValidation = InterviewValidator.validateInterviewMode()
+		ValidationResult interviewValidation = InterviewValidator.validateInterviewMode().and(InterviewValidator.isInterviewDataTimeGreaterThanCurrentDateTime())
 			.apply(interviewRequest);
 
 		if(!interviewValidation.isValid())

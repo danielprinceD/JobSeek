@@ -18,6 +18,7 @@ function CompanyCreationPopupForm({ onClose, onSuccess }: { onClose: () => void;
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
+		setIsSubmitting(true)
 		const response = await fetch(`${API_BASE_URL}/companies`, {
 			method: 'POST',
 			headers: {
@@ -38,9 +39,9 @@ function CompanyCreationPopupForm({ onClose, onSuccess }: { onClose: () => void;
 			} else {
 				setErrorMessage('Failed to create company. Please try again.')
 			}
+			setIsSubmitting(false)
 			return
 		}
-		// Handle form submission here
 		onClose()
 		onSuccess()
 	}
@@ -52,169 +53,158 @@ function CompanyCreationPopupForm({ onClose, onSuccess }: { onClose: () => void;
 			onClose={onClose}
 			errorMessage={errorMessage}
 		>
-			<form onSubmit={handleSubmit} className="space-y-6">
-					
-					{/* Form Fields */}
-					<div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-						<div>
-							<label htmlFor="companyName" className="block text-sm font-medium text-slate-700">Company Name</label>
-							<input
-								type="text"
-								name="companyName"
-								id="companyName"
-								onChange={(e) => setCompanyDetails({ ...companyDetails, companyName: e.target.value ?? null } as CompanyCreationForm)}
-								required
-								className="mt-1 block w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-							/>
-						</div>
+			<form onSubmit={handleSubmit} className="space-y-5">
 
-						<div>
-							<label htmlFor="companyEmail" className="block text-sm font-medium text-slate-700">Company Email</label>
-							<input
-								type="email"
-								name="companyEmail"
-								id="companyEmail"
-								onChange={(e) => setCompanyDetails({ ...companyDetails, companyEmail: e.target.value ?? null } as CompanyCreationForm)}
-								required
-								className="mt-1 block w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-							/>
-						</div>
-						
-						<div>
-							<label htmlFor="companyPhone" className="block text-sm font-medium text-slate-700">Company Phone</label>
-							<input
-								type="tel"
-								name="companyPhone"
-								id="companyPhone"
-								onChange={(e) => setCompanyDetails({ ...companyDetails, companyPhone: e.target.value ?? null } as CompanyCreationForm)}
-								className="mt-1 block w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-							/>
-						</div>
+				{/* Company Info */}
+				<p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Company Info</p>
+				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+					<div>
+						<label htmlFor="companyName" className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">🏢 Company Name</label>
+						<input
+							type="text"
+							name="companyName"
+							id="companyName"
+							placeholder="e.g. Acme Corporation"
+							onChange={(e) => setCompanyDetails({ ...companyDetails, companyName: e.target.value ?? null } as CompanyCreationForm)}
+							required
+							className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 text-sm transition-all duration-200 focus:outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+						/>
+					</div>
 
-						<div>
-							<label htmlFor="companyWebsite" className="block text-sm font-medium text-slate-700">Company Website</label>
-							<input
-								type="url"
-								name="companyWebsite"
-								id="companyWebsite"
-								onChange={(e) => setCompanyDetails({
-								...companyDetails,
-								companyWebsite : e.target.value ?? null
-								} as CompanyCreationForm)}
-								className="mt-1 block w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-							/>
-						</div>
-						
+					<div>
+						<label htmlFor="companyEmail" className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">✉️ Email</label>
+						<input
+							type="email"
+							name="companyEmail"
+							id="companyEmail"
+							placeholder="contact@company.com"
+							onChange={(e) => setCompanyDetails({ ...companyDetails, companyEmail: e.target.value ?? null } as CompanyCreationForm)}
+							required
+							className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 text-sm transition-all duration-200 focus:outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+						/>
+					</div>
+
+					<div>
+						<label htmlFor="companyPhone" className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">📞 Phone</label>
+						<input
+							type="tel"
+							name="companyPhone"
+							id="companyPhone"
+							placeholder="+91 1234567890"
+							onChange={(e) => setCompanyDetails({ ...companyDetails, companyPhone: e.target.value ?? null } as CompanyCreationForm)}
+							className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 text-sm transition-all duration-200 focus:outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+						/>
+					</div>
+
+					<div>
+						<label htmlFor="companyWebsite" className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">🌐 Website</label>
+						<input
+							type="url"
+							name="companyWebsite"
+							id="companyWebsite"
+							placeholder="https://company.com"
+							onChange={(e) => setCompanyDetails({ ...companyDetails, companyWebsite: e.target.value ?? null } as CompanyCreationForm)}
+							className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 text-sm transition-all duration-200 focus:outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+						/>
+					</div>
+
+					<div className="sm:col-span-2">
+						<label htmlFor="companyDescription" className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">📝 Description</label>
+						<textarea
+							name="companyDescription"
+							id="companyDescription"
+							rows={3}
+							placeholder="Brief description of the company..."
+							onChange={(e) => setCompanyDetails({ ...companyDetails, companyDescription: e.target.value ?? null } as CompanyCreationForm)}
+							className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 text-sm transition-all duration-200 focus:outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100 resize-none"
+						/>
+					</div>
+				</div>
+
+				{/* Address */}
+				<div className="border-t border-slate-100 pt-4">
+					<p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-4">📍 Address</p>
+					<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 						<div className="sm:col-span-2">
-							<label htmlFor="companyDescription" className="block text-sm font-medium text-slate-700">Company Description</label>
-							<textarea
-								name="companyDescription"
-								id="companyDescription"
-								rows={4}
-								onChange={(e) => setCompanyDetails({ ...companyDetails, companyDescription: e.target.value ?? null } as CompanyCreationForm)}
-								className="mt-1 block w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-							></textarea>
-						</div>
-
-						<div>
-							<label htmlFor="state" className="block text-sm font-medium text-slate-700">State</label>
-							<input
-								type="text"
-								onChange={(e) => setCompanyDetails({ 
-								...companyDetails,  
-								companyAddress : { 
-									...companyDetails?.companyAddress,  
-									state : e.target.value ?? null
-								} 
-								} as CompanyCreationForm)}
-								name="state"
-								id="state"
-								className="mt-1 block w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-							/>
-						</div>
-
-						<div>
-							<label htmlFor="country" className="block text-sm font-medium text-slate-700">Country</label>
-							<input
-								type="text"
-								name="country"
-								id="country"
-								onChange={(e) => setCompanyDetails({ 
-								...companyDetails,  
-								companyAddress : { 
-									...companyDetails?.companyAddress,  
-									country : e.target.value ?? null
-								} 
-								} as CompanyCreationForm)}
-								className="mt-1 block w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-							/>
-						</div>
-
-						<div>
-							<label htmlFor="street" className="block text-sm font-medium text-slate-700">Street</label>
+							<label htmlFor="street" className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">Street</label>
 							<input
 								type="text"
 								name="street"
 								id="street"
-								onChange={(e) => setCompanyDetails({
-								...companyDetails,
-								companyAddress : {
-									...companyDetails?.companyAddress,
-									street : e.target.value ?? null
-								}
-								} as CompanyCreationForm)}
-								className="mt-1 block w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+								placeholder="123 Main St"
+								onChange={(e) => setCompanyDetails({ ...companyDetails, companyAddress: { ...companyDetails?.companyAddress, street: e.target.value ?? null } } as CompanyCreationForm)}
+								className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 text-sm transition-all duration-200 focus:outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
 							/>
 						</div>
 
 						<div>
-							<label htmlFor="city" className="block text-sm font-medium text-slate-700">City</label>
+							<label htmlFor="city" className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">City</label>
 							<input
 								type="text"
 								name="city"
 								id="city"
-								className="mt-1 block w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+								placeholder="New York"
+								className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 text-sm transition-all duration-200 focus:outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
 							/>
 						</div>
 
 						<div>
-							<label htmlFor="zipCode" className="block text-sm font-medium text-slate-700">Zip Code</label>
+							<label htmlFor="state" className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">State</label>
+							<input
+								type="text"
+								name="state"
+								id="state"
+								placeholder="NY"
+								onChange={(e) => setCompanyDetails({ ...companyDetails, companyAddress: { ...companyDetails?.companyAddress, state: e.target.value ?? null } } as CompanyCreationForm)}
+								className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 text-sm transition-all duration-200 focus:outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+							/>
+						</div>
+
+						<div>
+							<label htmlFor="country" className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">Country</label>
+							<input
+								type="text"
+								name="country"
+								id="country"
+								placeholder="United States"
+								onChange={(e) => setCompanyDetails({ ...companyDetails, companyAddress: { ...companyDetails?.companyAddress, country: e.target.value ?? null } } as CompanyCreationForm)}
+								className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 text-sm transition-all duration-200 focus:outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+							/>
+						</div>
+
+						<div>
+							<label htmlFor="zipCode" className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5">Zip Code</label>
 							<input
 								type="text"
 								name="zipCode"
 								id="zipCode"
-								onChange={(e) => setCompanyDetails({
-								...companyDetails,
-								companyAddress : {
-									...companyDetails?.companyAddress,
-									zipCode : e.target.value ?? null
-								}
-								} as CompanyCreationForm)}
-								className="mt-1 block w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+								placeholder="10001"
+								onChange={(e) => setCompanyDetails({ ...companyDetails, companyAddress: { ...companyDetails?.companyAddress, zipCode: e.target.value ?? null } } as CompanyCreationForm)}
+								className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 text-sm transition-all duration-200 focus:outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
 							/>
 						</div>
-
 					</div>
-					
-					<div className="flex items-center justify-end gap-4">
-						<button
-							type="button"
-							onClick={onClose}
-							className="rounded-lg bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-200 transition-colors duration-200"
-						>
-							Cancel
-						</button>
-						<button
-							type="submit"
-							disabled={isSubmitting}
-							className={`rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors duration-200 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'}`}
-						>
-							{isSubmitting ? 'Creating...' : 'Create Company'}
-						</button>
-					</div>
-					
+				</div>
 
-				</form>
+				{/* Actions */}
+				<div className="flex items-center justify-end gap-3 pt-2 border-t border-slate-100">
+					<button
+						type="button"
+						onClick={onClose}
+						className="px-5 py-2.5 rounded-xl text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors duration-200"
+					>
+						Cancel
+					</button>
+					<button
+						type="submit"
+						disabled={isSubmitting}
+						className={`px-6 py-2.5 rounded-xl text-sm font-semibold text-white bg-linear-to-r from-blue-600 to-indigo-600 shadow-md transition-all duration-200 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:from-blue-700 hover:to-indigo-700 hover:shadow-lg'}`}
+					>
+						{isSubmitting ? 'Creating...' : 'Create Company →'}
+					</button>
+				</div>
+
+			</form>
 		</FormPopupTemplate>
 	)
 	
@@ -260,118 +250,118 @@ function Companies({ setIsLoggedIn }: CompanyPageProps) {
 	}, [])
 
 	return (
-		<main className="min-h-screen bg-[radial-gradient(circle_at_top,_#dbeafe,_#eff6ff_35%,_#f8fafc_75%)] px-6 py-10 text-slate-900">
-			<div className="mx-auto max-w-5xl">
-				<div className="rounded-[2rem] border border-white/70 bg-white/80 p-8 shadow-[0_30px_80px_rgba(30,41,59,0.12)] backdrop-blur sm:p-10">
-					<div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-						<div className="space-y-3">
-							<p className="text-sm font-medium uppercase tracking-[0.25em] text-sky-700">
-								Company directory
-							</p>
-							<h1 className="text-4xl font-semibold tracking-tight text-slate-900">
-								All companies
-							</h1>
+		<div className="min-h-screen bg-linear-to-br from-slate-50 via-blue-50 to-slate-100 px-6 py-12">
+			<div className="mx-auto max-w-6xl">
 
-						</div>
-						<div className="flex items-center gap-4">
-							<p className="text-sm text-slate-500">Logged in as User ID: {USER_ID}</p>
-						</div>
+				{/* Header */}
+				<div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+					<div>
+						<p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-1">Company Directory</p>
+						<h1 className="text-4xl font-bold text-slate-900">🏢 All Companies</h1>
+						<p className="text-slate-500 text-sm mt-1">Logged in as User ID: <span className="font-semibold text-slate-700">{USER_ID}</span></p>
 					</div>
-
-					<div className="mt-6 flex items-center justify-between gap-4 sm:mt-8">
-						<div className="flex items-center gap-2">
-							<p className="text-sm text-slate-500">Total companies:</p>
-							<p className="text-sm font-medium text-slate-900">{companies.length}</p>
-						</div>
-						
-
+					<div className="flex items-center gap-3">
 						<button
 							type="button"
-							onClick={() => setIsLoggedIn(false) }
-							className="inline-flex h-fit items-center justify-center rounded-2xl bg-slate-900 px-5 py-3 text-base font-semibold text-white transition hover:bg-slate-800 focus:outline-none focus:ring-4 focus:ring-slate-300"
+							onClick={() => setCompanyCreationPopupOpen(true)}
+							className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-md hover:shadow-lg transition-all duration-200"
+						>
+							+ Add Company
+						</button>
+						<button
+							type="button"
+							onClick={() => setIsLoggedIn(false)}
+							className="px-5 py-2.5 rounded-xl text-sm font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 shadow-sm transition-all duration-200"
 						>
 							Logout
 						</button>
 					</div>
+				</div>
 
-					
-					<div className="mt-6">
-						<button
-							type="button"
-							onClick={() => setCompanyCreationPopupOpen(true)}
-							className="inline-flex h-fit items-center justify-center rounded-2xl bg-slate-900 px-5 py-3 text-base font-semibold text-white transition hover:bg-slate-800 focus:outline-none focus:ring-4 focus:ring-slate-300"
-						>
-							Add Company
-						</button>
+				{companyCreationPopupOpen && (
+					<CompanyCreationPopupForm onClose={() => setCompanyCreationPopupOpen(false)} onSuccess={loadCompanies}/>
+				)}
+
+				{/* States */}
+				{isLoading ? (
+					<div className="flex items-center justify-center py-24">
+						<div className="text-center">
+							<div className="animate-spin rounded-full h-14 w-14 border-b-2 border-blue-600 mx-auto mb-4"></div>
+							<p className="text-slate-500 font-medium">Loading companies...</p>
+						</div>
 					</div>
-
-					{companyCreationPopupOpen && (
-						<CompanyCreationPopupForm onClose={() => setCompanyCreationPopupOpen(false)} onSuccess={loadCompanies}/>
-					)}
-					
-
-					{isLoading ? (
-						<div className="mt-8 rounded-3xl border border-slate-200 bg-slate-50 p-8 text-sm text-slate-500">
-							Loading companies...
+				) : errorMessage ? (
+					<div className="rounded-xl bg-red-50 border border-red-200 p-6 text-center">
+						<p className="text-red-700 font-medium">⚠️ {errorMessage}</p>
+					</div>
+				) : companies.length === 0 ? (
+					<div className="text-center py-20 bg-white rounded-2xl border border-slate-100 shadow-sm">
+						<p className="text-2xl text-slate-400 font-medium">📭 No companies found</p>
+						<p className="text-slate-400 text-sm mt-2">Get started by adding your first company.</p>
+					</div>
+				) : (
+					<>
+						<div className="mb-6">
+							<h2 className="text-xl font-semibold text-slate-800">
+								Total: <span className="text-blue-600">{companies.length}</span>
+							</h2>
 						</div>
-					) : errorMessage ? (
-						<div className="mt-8 rounded-3xl border border-red-200 bg-red-50 p-8 text-sm text-red-700">
-							{errorMessage}
-						</div>
-					) : companies.length === 0 ? (
-						<div className="mt-8 rounded-3xl border border-slate-200 bg-slate-50 p-8 text-sm text-slate-500">
-							No companies found.
-						</div>
-					) : (
-						<div className="mt-8 grid gap-5 sm:grid-cols-2">
+						<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
 							{companies.map((company) => (
-								<article key={company.companyId} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-									<div className="flex items-start justify-between gap-3">
-										<div>
-											<h2 className="text-xl font-semibold tracking-tight text-slate-900">{company.companyName}</h2>
-											<p className="mt-1 text-sm text-slate-500">ID: {company.companyId}</p>
+								<article
+									key={company.companyId}
+									className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] p-6 border border-slate-100 flex flex-col"
+								>
+									{/* Card Header */}
+									<div className="flex items-start justify-between gap-3 mb-4">
+										<div className="min-w-0">
+											<h2 className="text-lg font-bold text-slate-900 truncate">🏢 {company.companyName}</h2>
+											<p className="text-xs text-slate-400 font-mono mt-0.5">ID: {company.companyId}</p>
 										</div>
-										<span className="rounded-full bg-sky-50 px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-sky-700">
-											{company.companyAddress?.country ?? 'Country n/a'}
-										</span>
+										{company.companyAddress?.country && (
+											<span className="shrink-0 rounded-full bg-blue-50 border border-blue-100 px-2.5 py-1 text-xs font-semibold text-blue-700">
+												{company.companyAddress.country}
+											</span>
+										)}
 									</div>
 
-									<p className="mt-4 text-sm leading-6 text-slate-600">
-										{company.companyDescription ?? 'No company description is available yet.'}
+									<div className="border-t border-slate-100 mb-4"></div>
+
+									{/* Description */}
+									<p className="text-slate-500 text-sm leading-relaxed line-clamp-3 mb-4 flex-1">
+										{company.companyDescription ?? 'No description available.'}
 									</p>
 
-									<div className="mt-5 grid gap-3 text-sm text-slate-700">
-										<p>
-											<span className="font-medium text-slate-500">Email:</span> {company.companyEmail}
-										</p>
-										<p>
-											<span className="font-medium text-slate-500">Phone:</span> {company.companyPhone ?? 'Not provided'}
-										</p>
-										<p>
-											<span className="font-medium text-slate-500">Website:</span> {company.companyWebsite ?? 'Not provided'}
-										</p>
-
-
-										
+									{/* Details */}
+									<div className="space-y-2 mb-5 text-sm">
+										<div className="flex items-center gap-2 text-slate-600">
+											<span className="text-slate-400 text-xs uppercase tracking-wide font-medium w-14">Email</span>
+											<span className="truncate">{company.companyEmail}</span>
+										</div>
+										<div className="flex items-center gap-2 text-slate-600">
+											<span className="text-slate-400 text-xs uppercase tracking-wide font-medium w-14">Phone</span>
+											<span>{company.companyPhone ?? <span className="text-slate-300 italic">N/A</span>}</span>
+										</div>
+										<div className="flex items-center gap-2 text-slate-600">
+											<span className="text-slate-400 text-xs uppercase tracking-wide font-medium w-14">Web</span>
+											<span className="truncate">{company.companyWebsite ?? <span className="text-slate-300 italic">N/A</span>}</span>
+										</div>
 									</div>
-									
-									<Link to={`/companies/${company.companyId}`}
-										className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-sky-700 transition hover:text-sky-800"
+
+									{/* Action */}
+									<Link
+										to={`/companies/${company.companyId}`}
+										className="block w-full text-center bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-sm font-semibold py-3 px-4 rounded-lg transition-all duration-300 transform hover:-translate-y-0.5 shadow-md hover:shadow-lg"
 									>
-										View details
-										<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-4 w-4">
-											<path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
-										</svg>
+										View Details →
 									</Link>
-
-
 								</article>
 							))}
 						</div>
-					)}
-				</div>
-			</div> 
-		</main>
+					</>
+				)}
+			</div>
+		</div>
 	)
 }
 

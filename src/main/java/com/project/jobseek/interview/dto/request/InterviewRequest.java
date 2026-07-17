@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 public class InterviewRequest
 {
@@ -11,7 +13,7 @@ public class InterviewRequest
 	@NotNull( message = "Job Apply Id is required" )
 	private Long jobApplyId;
 
-	private String interviewDateTime;
+	private LocalDateTime interviewDateTime;
 	private String interviewLocation;
 	private String interviewMode;
 	private String interviewStatus;

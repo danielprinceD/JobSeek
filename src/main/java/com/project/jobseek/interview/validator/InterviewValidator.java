@@ -41,10 +41,10 @@ public interface InterviewValidator extends Validator<InterviewRequest>
 		return interview -> {
 			if(interview.getInterviewDateTime() == null)
 				return ValidationResult.invalid(Map.of("interviewDateTime", "Interview date time cannot be null"));
-			if(interview.getInterviewDateTime().isEmpty())
+			if(interview.getInterviewDateTime().toString().isEmpty())
 				return ValidationResult.invalid(Map.of("interviewDateTime", "Interview date time cannot be empty"));
 
-			if(LocalDateTime.parse(interview.getInterviewDateTime()).isBefore(LocalDateTime.now()))
+			if(LocalDateTime.parse(interview.getInterviewDateTime().toString()).isBefore(LocalDateTime.now()))
 				return ValidationResult.invalid(Map.of("interviewDateTime", "Interview date time must be greater than current date time"));
 
 			return ValidationResult.valid();
